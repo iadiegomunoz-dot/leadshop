@@ -1,0 +1,6 @@
+{
+  "name": "LeadShop — Base de clientes B2B con WhatsApp verificado",
+  "description": "Encontrá y contactá a tus próximos clientes en minutos. Negocios reales con WhatsApp verificado y sitio web, listos para outbound.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

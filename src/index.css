@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Onest", "Manrope", system-ui, sans-serif;
+  --font-sans: "Manrope", "Onest", system-ui, sans-serif;
+  --color-cobalt-frame: #2b62f6;
+  --color-cobalt-deep: #2457ed;
+  --color-cobalt-bright: #4378fc;
+  --color-acid-lime: #eafc66;
+  --color-acid-clay: #d7ea64;
+  --color-ice-surface: #eff4fa;
+  --color-ink-primary: #181d27;
+  --color-ink-muted: #60697a;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: #2b62f6;
+    color: #181d27;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+}
+
+.hero-gradient {
+  background: radial-gradient(
+      95% 95% at 88% 12%,
+      rgba(95, 144, 255, 0.72) 0%,
+      rgba(45, 100, 246, 0) 60%
+    ),
+    radial-gradient(
+      80% 80% at 10% 90%,
+      rgba(31, 80, 229, 0.9) 0%,
+      rgba(45, 100, 246, 0) 65%
+    ),
+    linear-gradient(135deg, #3e73fa 0%, #2d63f5 52%, #2456ea 100%);
+}
+
+.blue-card-gradient {
+  background: radial-gradient(
+      90% 90% at 15% 10%,
+      rgba(86, 137, 255, 0.5) 0%,
+      rgba(47, 102, 246, 0) 65%
+    ),
+    linear-gradient(155deg, #3a70fa 0%, #2b61f4 58%, #2254e6 100%);
+}
+
+.lime-card-surface {
+  background: linear-gradient(145deg, #eefc74 0%, #e7fa5c 100%);
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-scroll 32s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.float-chip {
+  animation: float-y 5.2s ease-in-out infinite;
+}
+
+.float-chip.delay-1 {
+  animation-delay: -1.7s;
+}
+
+.float-chip.delay-2 {
+  animation-delay: -3.4s;
+}
+
+/* Rotating conic border for the "A medida" pricing card */
+@property --conic-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.conic-border::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--conic-angle),
+    #eafc66 0%,
+    #7fb0ff 30%,
+    #2b62f6 55%,
+    #eafc66 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: conic-rotate 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes conic-rotate {
+  to {
+    --conic-angle: 360deg;
+  }
+}
+
+/* Craft details */
+::selection {
+  background: #eafc66;
+  color: #181d27;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f6fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c3d2ee;
+  border-radius: 8px;
+  border: 2px solid #f4f6fa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2b62f6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
