@@ -14,6 +14,12 @@ const ratelimit = new Ratelimit({
   prefix: 'leadshop_rl',
 });
 
+const adminRatelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, '60 s'),
+  prefix: 'leadshop_admin',
+});
+
 const MAX_LEN = 2000;
 
 function clean(value: unknown, max = MAX_LEN): string {
@@ -21,6 +27,11 @@ function clean(value: unknown, max = MAX_LEN): string {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const ip =
+    clean(req.headers['x-forwarded-for'], 100).split(',')[0].trim() ||
+    clean(req.socket?.remoteAddress, 100) ||
+    'unknown';
+
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
@@ -28,6 +39,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // GET /api/leads — returns all stored leads, newest first
   // Auth: x-admin-key header only (query-string keys leak into logs)
   if (req.method === 'GET') {
+    try {
+      const { success } = await adminRatelimit.limit(`admin:${ip}`);
+      if (!success) {
+        return res.status(429).json({ ok: false, error: 'Too many requests' });
+      }
+    } catch {
+      // If Redis is unreachable, don't block the admin panel
+    }
+
     const adminKey = process.env.ADMIN_KEY;
     const provided = clean(req.headers['x-admin-key'], 200);
     if (!adminKey || provided !== adminKey) {
@@ -58,10 +78,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Rate limit: 5 submissions per 10s per IP
-  const ip =
-    clean(req.headers['x-forwarded-for'], 100).split(',')[0].trim() ||
-    clean(req.socket?.remoteAddress, 100) ||
-    'unknown';
   try {
     const { success } = await ratelimit.limit(`lead:${ip}`);
     if (!success) {
