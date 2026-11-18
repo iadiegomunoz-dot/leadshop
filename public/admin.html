@@ -12,10 +12,10 @@
     background: #F4F6FA; color: #181D27; min-height: 100vh;
   }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
-  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
   h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
   h1 span { color: #2B62F6; }
-  .actions { display: flex; gap: 8px; }
+  .actions { display: flex; gap: 8px; align-items: center; }
   button, .btn {
     font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
     border: none; border-radius: 999px; padding: 9px 18px;
@@ -23,6 +23,36 @@
     display: inline-flex; align-items: center; gap: 6px;
   }
   button.ghost { background: #E8EFFD; color: #2B62F6; }
+  .search {
+    padding: 9px 16px; border-radius: 999px; border: 1.5px solid #E2E8F0;
+    font: inherit; font-size: 13px; width: 200px; outline: none; background: #fff;
+  }
+  .search:focus { border-color: #2B62F6; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .stat { background: #fff; border-radius: 16px; padding: 16px 18px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); }
+  .stat .v { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: #60697A; font-weight: 700; margin-top: 3px; }
+  .stat .s { font-size: 11.5px; color: #60697A; margin-top: 2px; }
+  .grid2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+  .panel { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); padding: 20px; }
+  .panel h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #60697A; margin-bottom: 14px; }
+  .chart { display: flex; align-items: flex-end; gap: 5px; height: 110px; }
+  .day { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; height: 100%; min-width: 0; }
+  .day .bars { display: flex; align-items: flex-end; gap: 2px; height: 88px; width: 100%; justify-content: center; }
+  .day i { width: 9px; max-width: 12px; border-radius: 4px 4px 1px 1px; display: block; min-height: 2px; }
+  .day i.v { background: #2B62F6; }
+  .day i.l { background: #EAFC66; border: 1px solid #D9E85A; }
+  .day span { font-size: 9px; color: #60697A; white-space: nowrap; }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 11.5px; color: #60697A; font-weight: 600; }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .bgroup { margin-bottom: 14px; }
+  .bgroup:last-child { margin-bottom: 0; }
+  .bgroup h4 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #60697A; margin-bottom: 6px; }
+  .brow { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; }
+  .brow .bar-track { flex: 1; height: 6px; background: #EEF1F6; border-radius: 99px; margin: 0 10px; overflow: hidden; }
+  .brow .bar-fill { height: 100%; background: #2B62F6; border-radius: 99px; }
+  .brow .bar-fill.lead { background: #181D27; }
   .card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); overflow: hidden; }
   .login { max-width: 380px; margin: 80px auto; background: #fff; border-radius: 24px; padding: 36px 28px; box-shadow: 0 8px 40px rgba(24,29,39,0.08); text-align: center; }
   .login h2 { font-size: 20px; margin-bottom: 6px; }
@@ -71,11 +101,30 @@
         <p class="count" id="countLabel" style="margin-top:4px"></p>
       </div>
       <div class="actions">
+        <input class="search" id="searchInput" placeholder="Buscar lead…" oninput="renderTable()" />
         <button class="ghost" onclick="load()">↻ Actualizar</button>
         <button onclick="exportCsv()">↓ CSV</button>
         <button class="ghost" onclick="logout()">Salir</button>
       </div>
     </header>
+
+    <div class="stats" id="statCards"></div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Visitas y leads · últimos 14 días</h3>
+        <div class="chart" id="chart"></div>
+        <div class="legend">
+          <span><i style="background:#2B62F6"></i>Visitas</span>
+          <span><i style="background:#EAFC66;border:1px solid #D9E85A"></i>Leads</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Desglose de leads</h3>
+        <div id="breakdown"></div>
+      </div>
+    </div>
+
     <div class="card">
       <table>
         <thead>
@@ -94,9 +143,14 @@
 <script>
 const $ = (id) => document.getElementById(id);
 let KEY = localStorage.getItem('leadshop_admin_key') || '';
+let ALL_LEADS = [];
+let VISIT_DAYS = [];
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleString('es-CL', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+const dayOf = (iso) => (iso || '').slice(0, 10);
+const todayStr = () => new Date().toISOString().slice(0, 10);
+const daysAgoStr = (n) => { const d = new Date(); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); };
 
 function login() {
   KEY = $('keyInput').value.trim();
@@ -115,8 +169,11 @@ $('keyInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') login(
 async function load() {
   if (!KEY) { $('loginBox').style.display = 'block'; return; }
   try {
-    const res = await fetch('/api/leads', { headers: { 'x-admin-key': KEY } });
-    if (res.status === 401) {
+    const [res, statsRes] = await Promise.all([
+      fetch('/api/leads', { headers: { 'x-admin-key': KEY } }),
+      fetch('/api/stats', { headers: { 'x-admin-key': KEY } }),
+    ]);
+    if (res.status === 401 || statsRes.status === 401) {
       localStorage.removeItem('leadshop_admin_key'); KEY = '';
       $('loginBox').style.display = 'block';
       $('loginErr').textContent = 'Clave incorrecta';
@@ -125,18 +182,109 @@ async function load() {
     const data = await res.json();
     if (!data.ok) throw new Error('bad');
     localStorage.setItem('leadshop_admin_key', KEY);
-    render(data.leads || []);
+    ALL_LEADS = data.leads || [];
+    const sd = await statsRes.json().catch(() => null);
+    VISIT_DAYS = sd && sd.ok ? sd.days : [];
+    renderDashboard();
   } catch {
     $('loginErr').textContent = 'No se pudo cargar. Intenta de nuevo.';
     $('loginBox').style.display = 'block';
   }
 }
 
-function render(leads) {
+function countWhere(arr, fn) { return arr.filter(fn).length; }
+
+function renderDashboard() {
   $('loginBox').style.display = 'none';
   $('app').style.display = 'block';
-  $('countLabel').textContent = leads.length + (leads.length === 1 ? ' lead' : ' leads');
+  renderStats();
+  renderChart();
+  renderBreakdown();
+  renderTable();
+}
+
+function renderStats() {
+  const today = todayStr();
+  const leadsToday = countWhere(ALL_LEADS, l => dayOf(l.createdAt) === today);
+  const leads7 = countWhere(ALL_LEADS, l => dayOf(l.createdAt) >= daysAgoStr(6));
+  const orders = countWhere(ALL_LEADS, l => l.source === 'order');
+  const visitsToday = VISIT_DAYS.length ? VISIT_DAYS[VISIT_DAYS.length - 1] : { visits: 0, uniques: 0 };
+  const v7 = VISIT_DAYS.slice(-7).reduce((a, d) => a + d.visits, 0);
+  const u7 = VISIT_DAYS.slice(-7).reduce((a, d) => a + d.uniques, 0);
+
+  const cards = [
+    { v: visitsToday.uniques, l: 'Visitantes hoy', s: `${visitsToday.visits} visitas` },
+    { v: v7, l: 'Visitas · 7 días', s: `${u7} únicos` },
+    { v: ALL_LEADS.length, l: 'Leads total', s: `${orders} pedidos` },
+    { v: leadsToday, l: 'Leads hoy', s: `${leads7} en 7 días` },
+    { v: countWhere(ALL_LEADS, l => l.source !== 'order'), l: 'Consultas', s: 'formulario contacto' },
+  ];
+  $('statCards').innerHTML = cards.map(c =>
+    `<div class="stat"><div class="v">${c.v}</div><div class="l">${c.l}</div><div class="s">${c.s}</div></div>`
+  ).join('');
+  $('countLabel').textContent = ALL_LEADS.length + (ALL_LEADS.length === 1 ? ' lead' : ' leads');
+}
+
+function renderChart() {
+  // Merge visits + leads per day for the last 14 days
+  const leadByDay = {};
+  ALL_LEADS.forEach(l => { const d = dayOf(l.createdAt); leadByDay[d] = (leadByDay[d] || 0) + 1; });
+  const visitByDay = {};
+  VISIT_DAYS.forEach(d => { visitByDay[d.date] = d.visits; });
+
+  const allDays = new Set([...Object.keys(leadByDay), ...Object.keys(visitByDay)]);
+  const days = [];
+  for (let i = 13; i >= 0; i--) days.push(daysAgoStr(i));
+  const maxV = Math.max(1, ...days.map(d => (visitByDay[d] || 0)));
+  const maxL = Math.max(1, ...days.map(d => (leadByDay[d] || 0)));
+
+  $('chart').innerHTML = days.map(d => {
+    const v = visitByDay[d] || 0, l = leadByDay[d] || 0;
+    const vh = Math.round((v / maxV) * 88), lh = Math.round((l / maxL) * 88);
+    const label = d.slice(8) + '/' + d.slice(5, 7);
+    return `<div class="day" title="${d}: ${v} visitas · ${l} leads">
+      <div class="bars"><i class="v" style="height:${vh}px"></i><i class="l" style="height:${lh}px"></i></div>
+      <span>${label}</span>
+    </div>`;
+  }).join('');
+}
+
+const PLAN_LABELS = { starter: 'Esencial', growth: 'Crecimiento', custom: 'A medida' };
+
+function breakdownGroup(title, counts) {
+  const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const max = Math.max(1, ...entries.map(e => e[1]));
+  if (!entries.length) return `<div class="bgroup"><h4>${title}</h4><div class="brow"><span style="color:#60697A">Sin datos</span></div></div>`;
+  return `<div class="bgroup"><h4>${title}</h4>` + entries.map(([k, n]) =>
+    `<div class="brow"><span style="min-width:90px">${esc(k)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.round(n / max * 100)}%"></span></span><span class="mono">${n}</span></div>`
+  ).join('') + '</div>';
+}
+
+function renderBreakdown() {
+  const byPlan = {}, byCountry = {}, bySource = {};
+  ALL_LEADS.forEach(l => {
+    const p = PLAN_LABELS[l.plan] || l.plan || 'Sin plan';
+    byPlan[p] = (byPlan[p] || 0) + 1;
+    const c = l.country || 'Sin país';
+    byCountry[c] = (byCountry[c] || 0) + 1;
+    const s = l.source === 'order' ? 'Pedido' : 'Contacto';
+    bySource[s] = (bySource[s] || 0) + 1;
+  });
+  $('breakdown').innerHTML =
+    breakdownGroup('Por plan', byPlan) +
+    breakdownGroup('Por país', byCountry) +
+    breakdownGroup('Por origen', bySource);
+}
+
+function renderTable() {
+  const q = ($('searchInput').value || '').toLowerCase().trim();
+  const leads = q
+    ? ALL_LEADS.filter(l => [l.name, l.company, l.contact, l.country, l.targetDesc, l.plan]
+        .some(v => String(v || '').toLowerCase().includes(q)))
+    : ALL_LEADS;
+
   $('empty').style.display = leads.length ? 'none' : 'block';
+  $('empty').textContent = q ? 'Sin resultados para esa búsqueda.' : 'Aún no hay leads. Aparecerán aquí cuando alguien use los formularios.';
   $('tbody').innerHTML = leads.map(l => `
     <tr>
       <td class="mono" data-label="Fecha">${fmtDate(l.createdAt)}</td>
@@ -152,17 +300,15 @@ function render(leads) {
 }
 
 function exportCsv() {
-  fetch('/api/leads', { headers: { 'x-admin-key': KEY } }).then(r => r.json()).then(data => {
-    const rows = (data.leads || []).map(l => [
-      l.createdAt, l.name, l.company, l.contact, l.country, l.targetDesc, l.plan, l.source, l.lang
-    ]);
-    const csv = 'Fecha,Nombre,Empresa,Contacto,Pais,Quiere venderle a,Plan,Origen,Idioma\n' +
-      rows.map(r => r.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
-    a.download = 'leadshop-leads.csv';
-    a.click();
-  });
+  const rows = ALL_LEADS.map(l => [
+    l.createdAt, l.name, l.company, l.contact, l.country, l.targetDesc, l.plan, l.source, l.lang
+  ]);
+  const csv = 'Fecha,Nombre,Empresa,Contacto,Pais,Quiere venderle a,Plan,Origen,Idioma\n' +
+    rows.map(r => r.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'leadshop-leads.csv';
+  a.click();
 }
 
 if (KEY) load(); else { $('loginBox').style.display = 'block'; }
