@@ -14,12 +14,6 @@ const ratelimit = new Ratelimit({
   prefix: 'leadshop_rl',
 });
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
 const MAX_LEN = 2000;
 
 function clean(value: unknown, max = MAX_LEN): string {
@@ -27,18 +21,15 @@ function clean(value: unknown, max = MAX_LEN): string {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
-
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
 
   // GET /api/leads — returns all stored leads, newest first
-  // Auth: x-admin-key header or ?key= (header preferred, not logged)
+  // Auth: x-admin-key header only (query-string keys leak into logs)
   if (req.method === 'GET') {
     const adminKey = process.env.ADMIN_KEY;
-    const provided =
-      clean(req.headers['x-admin-key'], 200) || clean(req.query.key, 200);
+    const provided = clean(req.headers['x-admin-key'], 200);
     if (!adminKey || provided !== adminKey) {
       return res.status(401).json({ ok: false, error: 'Unauthorized' });
     }
@@ -100,6 +91,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!contact || (!targetDesc && !query) || (!name && !company && source === 'contact')) {
     return res.status(400).json({ ok: false, error: 'Missing fields' });
+  }
+
+  if (source === 'order' && !termsAccepted) {
+    return res.status(400).json({ ok: false, error: 'Terms not accepted' });
   }
 
   const lead = {
