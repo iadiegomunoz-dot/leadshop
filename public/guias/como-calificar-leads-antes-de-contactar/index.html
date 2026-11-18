@@ -19,41 +19,130 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Cómo calificar leads antes de contactarlos (y no perder tiempo)", "description": "No todos los contactos valen lo mismo. Aprende a calificar leads B2B por rubro, tamaño y señales de compra antes de escribir el primer mensaje.", "datePublished": "2026-11-18", "dateModified": "2026-11-18", "inLanguage": "es", "author": {"@type": "Organization", "name": "LeadShop", "url": "https://www.leadshop.site/"}, "publisher": {"@type": "Organization", "name": "LeadShop", "url": "https://www.leadshop.site/", "logo": {"@type": "ImageObject", "url": "https://www.leadshop.site/assets/og-hero.png"}}, "mainEntityOfPage": "https://www.leadshop.site/guias/como-calificar-leads-antes-de-contactar/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.leadshop.site/"}, {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.leadshop.site/guias/"}, {"@type": "ListItem", "position": 3, "name": "Cómo calificar leads antes de contactarlos (y no perder tiempo)", "item": "https://www.leadshop.site/guias/como-calificar-leads-antes-de-contactar/"}]}]}</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; text-decoration: none; color: #181D27; }
-  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: #2B62F6; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav — mismo estilo que la landing */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(244,246,250,.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(24,29,39,.06); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #181D27; }
   .brand b span { color: #2B62F6; }
-  .crumbs { font-size: 12.5px; color: #60697A; margin-bottom: 18px; }
-  .crumbs a { color: #2B62F6; text-decoration: none; }
-  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 18px; }
-  h2 { font-size: 20px; font-weight: 800; margin: 32px 0 10px; letter-spacing: -0.01em; }
-  p { font-size: 16px; color: #3A4252; margin-bottom: 14px; }
-  .card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); margin-top: 20px; }
-  .card a { color: #2B62F6; font-weight: 600; }
-  .cta { display: inline-block; margin-top: 28px; background: #2B62F6; color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; }
-  .meta { font-size: 12.5px; color: #60697A; margin-top: 24px; }
-  footer { margin-top: 48px; font-size: 12.5px; color: #60697A; text-align: center; }
-  footer a { color: #2B62F6; text-decoration: none; }
-  @media (max-width: 600px) { .card { padding: 22px 18px; } h1 { font-size: 24px; } }
+  .nav-cta { display: inline-flex; align-items: center; gap: 8px; background: #181D27; color: #fff; font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: 999px; text-decoration: none; transition: background .15s; }
+  .nav-cta:hover { background: #2B62F6; }
+  .nav-cta svg { width: 14px; height: 14px; }
+
+  /* Hero del artículo — bloque azul como las secciones de la landing */
+  .hero { background: linear-gradient(135deg, #1B3A8F 0%, #2B62F6 60%, #3D74FF 100%); color: #fff; padding: 64px 0 96px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; left: -80px; bottom: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(234,252,102,.14); }
+  .hero::after { content: ''; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero .wrap { position: relative; }
+  .kicker { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); color: #EAFC66; font-size: 11.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px; }
+  .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.14; margin-bottom: 16px; max-width: 640px; }
+  .hero .lead { font-size: 16.5px; color: rgba(255,255,255,.88); max-width: 600px; line-height: 1.6; }
+  .hero .meta { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 12.5px; color: rgba(255,255,255,.75); font-weight: 600; }
+
+  /* Card del artículo */
+  .article-card { background: #fff; border-radius: 28px; box-shadow: 0 20px 60px rgba(24,29,39,.09); margin-top: -56px; padding: 44px 48px 48px; position: relative; }
+
+  /* Índice */
+  .toc { background: #F4F6FA; border: 1px solid #E8ECF2; border-radius: 18px; padding: 22px 26px; margin-bottom: 34px; }
+  .toc h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 12px; font-weight: 800; }
+  .toc ol { list-style: none; padding: 0; columns: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 7px; break-inside: avoid; }
+  .toc a { font-size: 14px; font-weight: 600; color: #3A4252; text-decoration: none; display: flex; gap: 9px; }
+  .toc a::before { content: attr(data-n); color: #2B62F6; font-weight: 800; flex-shrink: 0; }
+  .toc a:hover { color: #2B62F6; }
+
+  /* Secciones */
+  h2.sec { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 42px 0 14px; padding-left: 18px; border-left: 5px solid #EAFC66; line-height: 1.3; scroll-margin-top: 90px; }
+  p.body { font-size: 16px; color: #3A4252; margin-bottom: 16px; }
+  p.body:first-of-type { font-size: 17.5px; color: #181D27; font-weight: 500; }
+  strong { color: #181D27; }
+
+  /* CTA final — panel azul con botón lima, como la landing */
+  .cta-panel { margin-top: 48px; background: linear-gradient(120deg, #141F38, #1B3A8F 60%, #2B62F6); border-radius: 24px; padding: 40px 36px; color: #fff; text-align: center; position: relative; overflow: hidden; }
+  .cta-panel::before { content: ''; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(234,252,102,.15); }
+  .cta-panel h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; position: relative; }
+  .cta-panel p { color: rgba(255,255,255,.85); font-size: 14.5px; margin-bottom: 26px; max-width: 480px; margin-left: auto; margin-right: auto; position: relative; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: #EAFC66; color: #181D27; font-weight: 800; font-size: 15px; padding: 15px 32px; border-radius: 999px; text-decoration: none; transition: transform .15s, filter .15s; position: relative; }
+  .cta:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .cta svg { width: 16px; height: 16px; }
+
+  /* Guías relacionadas */
+  .related { margin-top: 44px; }
+  .related h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 16px; font-weight: 800; }
+  .rel-grid { display: grid; gap: 14px; }
+  .rel-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border-radius: 18px; padding: 20px 24px; text-decoration: none; color: #181D27; border: 1px solid #E8ECF2; transition: all .18s; }
+  .rel-card:hover { border-color: #2B62F6; box-shadow: 0 10px 30px rgba(43,98,246,.1); transform: translateY(-2px); }
+  .rel-card .t { font-weight: 700; font-size: 15px; line-height: 1.35; }
+  .rel-card .d { font-size: 12.5px; color: #8A93A5; font-weight: 500; margin-top: 3px; }
+  .rel-card .arrow { color: #2B62F6; font-size: 18px; flex-shrink: 0; }
+
+  /* Footer */
+  footer { margin-top: 48px; padding: 28px 0 48px; border-top: 1px solid #E8ECF2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+  footer .fbrand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: #181D27; text-decoration: none; }
+  footer .fbrand span { color: #2B62F6; }
+  footer .flinks { display: flex; gap: 20px; }
+  footer .flinks a { font-size: 13px; font-weight: 600; color: #60697A; text-decoration: none; }
+  footer .flinks a:hover { color: #2B62F6; }
+  footer .copy { font-size: 12px; color: #9AA3B2; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 44px 0 80px; }
+    .hero h1 { font-size: 27px; }
+    .article-card { padding: 28px 22px 32px; margin-top: -40px; }
+    .toc ol { columns: 1; }
+    .cta-panel { padding: 32px 22px; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <a class="brand" href="https://www.leadshop.site/">
-    <svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <b>Lead<span>Shop</span></b>
-  </a>
-  <nav class="crumbs"><a href="https://www.leadshop.site/">Inicio</a> · <a href="https://www.leadshop.site/guias/">Guías</a> · Cómo calificar leads antes de contactarlos (y no perder tiempo)</nav>
-  <div class="card">
+
+<nav><div class="wrap">
+  <a class="brand" href="https://www.leadshop.site/"><svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Lead<span>Shop</span></b></a>
+  <a class="nav-cta" href="https://www.leadshop.site/#precios">Ver planes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div></nav>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="kicker">Guía · Ventas B2B</span>
     <h1>Cómo calificar leads antes de contactarlos</h1>
-    <p>Tener 500 contactos no sirve si 400 no pueden comprarte. Calificar es filtrar antes de escribir: así dedicas tus mensajes a quienes tienen el problema que resuelves, el presupuesto para pagarlo y la autoridad para decidir.</p>
-    <h2>Califica por problema, no por tamaño</h2><p>Un negocio pequeño que tiene exactamente el problema que resuelves vale más que una empresa grande que no lo tiene. Antes de contactar, pregúntate: ¿esta empresa realmente sufre el problema que yo resuelvo? Si vendes software de gestión para clínicas, una clínica con agenda llena y desordenada es tu lead; una que ya usa software y está contenta, no.</p><h2>Señales de que están listos para comprar</h2><p>Busca señales activas: están contratando, publicaron una vacante relacionada con tu solución, cambiaron de rubro, tienen una web nueva o mala, o su Instagram está abandonado. Una empresa que invierte en mejorar algo relacionado a lo que vendes es más receptiva que una que no muestra señales de cambio.</p><h2>El filtro de autoridad</h2><p>En pymes, el dueño o gerente suele decidir solo. En empresas medianas, necesitas al decisor, no al becario que atiende el WhatsApp. Verifica que el contacto que tienes sea de alguien que pueda decir &#x27;sí&#x27; o al menos &#x27;te presento con quien decide&#x27;.</p><h2>Descarta rápido para prospectar más</h2><p>Es tentador escribirle a todos &#x27;por si acaso&#x27;. No. Cada mensaje a un lead mal calificado es tiempo y reputación perdidos. Si después de revisar la ficha no encaja en tu cliente ideal, sáltalo. Es mejor 50 mensajes bien dirigidos que 500 genéricos.</p><h2>Actualiza la calificación después del primer contacto</h2><p>La calificación no es fija: alguien que dijo &#x27;no me interesa&#x27; puede ser &#x27;ahora no&#x27; y alguien que no respondió puede necesitar otro canal. Revisa tus leads fríos cada 60-90 días con un ángulo nuevo antes de descartarlos para siempre.</p>
-    <p>Calificar es más fácil cuando la base ya viene limpia: mira las <a href="/bases-de-datos/">bases por rubro y ciudad</a> con WhatsApp verificado y datos frescos.</p>
-    <a class="cta" href="https://www.leadshop.site/#precios">Ver precios y armar mi base</a>
-    <p class="meta">Publicado el 18 de noviembre de 2026 · LeadShop</p>
+    <p class="lead">No todos los contactos valen lo mismo. Aprende a calificar leads B2B por rubro, tamaño y señales de compra antes de escribir el primer mensaje.</p>
+    <div class="meta"><span>18 nov 2026</span><span>~3 min de lectura</span><span>LeadShop</span></div>
   </div>
-  <footer><a href="https://www.leadshop.site/guias/">Todas las guías</a> · <a href="https://www.leadshop.site/">LeadShop</a></footer>
+</div>
+
+<div class="wrap">
+  <div class="article-card">
+    <div class="toc">
+      <h3>En esta guía</h3>
+      <ol><li><a href="#s1" data-n="1.">Califica por problema, no por tamaño</a></li><li><a href="#s2" data-n="2.">Señales de que están listos para comprar</a></li><li><a href="#s3" data-n="3.">El filtro de autoridad</a></li><li><a href="#s4" data-n="4.">Descarta rápido para prospectar más</a></li><li><a href="#s5" data-n="5.">Actualiza la calificación después del primer contacto</a></li></ol>
+    </div>
+    <p class="body">Tener 500 contactos no sirve si 400 no pueden comprarte. Calificar es filtrar antes de escribir: así dedicas tus mensajes a quienes tienen el problema que resuelves, el presupuesto para pagarlo y la autoridad para decidir.</p>
+    <h2 class="sec" id="s1">1. Califica por problema, no por tamaño</h2><p class="body">Un negocio pequeño que tiene exactamente el problema que resuelves vale más que una empresa grande que no lo tiene. Antes de contactar, pregúntate: ¿esta empresa realmente sufre el problema que yo resuelvo? Si vendes software de gestión para clínicas, una clínica con agenda llena y desordenada es tu lead; una que ya usa software y está contenta, no.</p><h2 class="sec" id="s2">2. Señales de que están listos para comprar</h2><p class="body">Busca señales activas: están contratando, publicaron una vacante relacionada con tu solución, cambiaron de rubro, tienen una web nueva o mala, o su Instagram está abandonado. Una empresa que invierte en mejorar algo relacionado a lo que vendes es más receptiva que una que no muestra señales de cambio.</p><h2 class="sec" id="s3">3. El filtro de autoridad</h2><p class="body">En pymes, el dueño o gerente suele decidir solo. En empresas medianas, necesitas al decisor, no al becario que atiende el WhatsApp. Verifica que el contacto que tienes sea de alguien que pueda decir &#x27;sí&#x27; o al menos &#x27;te presento con quien decide&#x27;.</p><h2 class="sec" id="s4">4. Descarta rápido para prospectar más</h2><p class="body">Es tentador escribirle a todos &#x27;por si acaso&#x27;. No. Cada mensaje a un lead mal calificado es tiempo y reputación perdidos. Si después de revisar la ficha no encaja en tu cliente ideal, sáltalo. Es mejor 50 mensajes bien dirigidos que 500 genéricos.</p><h2 class="sec" id="s5">5. Actualiza la calificación después del primer contacto</h2><p class="body">La calificación no es fija: alguien que dijo &#x27;no me interesa&#x27; puede ser &#x27;ahora no&#x27; y alguien que no respondió puede necesitar otro canal. Revisa tus leads fríos cada 60-90 días con un ángulo nuevo antes de descartarlos para siempre.</p>
+    <div class="cta-panel">
+      <h3>¿Listo para conseguir esos clientes?</h3>
+      <p>Arma tu base de negocios verificados por rubro y ciudad en menos de 2 minutos. Pago único, sin suscripción.</p>
+      <a class="cta" href="https://www.leadshop.site/#precios">Ver planes y precios <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h3>Guías relacionadas</h3>
+    <div class="rel-grid"><a class="rel-card" href="https://www.leadshop.site/guias/como-conseguir-clientes-nuevos/"><span><span class="t">Cómo conseguir clientes nuevos: guía práctica para pymes y freelancers</span><span class="d" style="display:block">Métodos reales para conseguir clientes nuevos en 2026: prospección directa, refe…</span></span><span class="arrow">→</span></a><a class="rel-card" href="https://www.leadshop.site/guias/prospectar-por-whatsapp-sin-que-te-bloqueen/"><span><span class="t">Cómo prospectar por WhatsApp B2B sin que te bloqueen (guía 2026)</span><span class="d" style="display:block">WhatsApp es el canal con más respuesta para pymes, pero hacerlo mal te cuesta el…</span></span><span class="arrow">→</span></a><a class="rel-card" href="https://www.leadshop.site/guias/como-elegir-base-de-datos-b2b/"><span><span class="t">Cómo elegir una base de datos B2B sin tirar la plata</span><span class="d" style="display:block">Qué verificar antes de comprar una base de datos de clientes: verificación de Wh…</span></span><span class="arrow">→</span></a></div>
+  </div>
+
+  <footer>
+    <a class="fbrand" href="https://www.leadshop.site/"><svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:15px"><b style="color:#2B62F6">Lead</b>Shop</span></a>
+    <div class="flinks">
+      <a href="https://www.leadshop.site/guias/">Todas las guías</a>
+      <a href="https://www.leadshop.site/bases-de-datos/">Bases por rubro y ciudad</a>
+      <a href="https://www.leadshop.site/">Inicio</a>
+    </div>
+    <span class="copy">© 2026 LeadShop</span>
+  </footer>
 </div>
 </body>
 </html>

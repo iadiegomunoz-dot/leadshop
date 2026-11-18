@@ -141,29 +141,106 @@ ARTICLES = [
 
 CSS = """
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; text-decoration: none; color: #181D27; }
-  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: #2B62F6; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav — mismo estilo que la landing */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(244,246,250,.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(24,29,39,.06); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #181D27; }
   .brand b span { color: #2B62F6; }
-  .crumbs { font-size: 12.5px; color: #60697A; margin-bottom: 18px; }
-  .crumbs a { color: #2B62F6; text-decoration: none; }
-  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 18px; }
-  h2 { font-size: 20px; font-weight: 800; margin: 32px 0 10px; letter-spacing: -0.01em; }
-  p { font-size: 16px; color: #3A4252; margin-bottom: 14px; }
-  .card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); margin-top: 20px; }
-  .card a { color: #2B62F6; font-weight: 600; }
-  .cta { display: inline-block; margin-top: 28px; background: #2B62F6; color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; }
-  .meta { font-size: 12.5px; color: #60697A; margin-top: 24px; }
-  footer { margin-top: 48px; font-size: 12.5px; color: #60697A; text-align: center; }
-  footer a { color: #2B62F6; text-decoration: none; }
-  @media (max-width: 600px) { .card { padding: 22px 18px; } h1 { font-size: 24px; } }
+  .nav-cta { display: inline-flex; align-items: center; gap: 8px; background: #181D27; color: #fff; font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: 999px; text-decoration: none; transition: background .15s; }
+  .nav-cta:hover { background: #2B62F6; }
+  .nav-cta svg { width: 14px; height: 14px; }
+
+  /* Hero del artículo — bloque azul como las secciones de la landing */
+  .hero { background: linear-gradient(135deg, #1B3A8F 0%, #2B62F6 60%, #3D74FF 100%); color: #fff; padding: 64px 0 96px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; left: -80px; bottom: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(234,252,102,.14); }
+  .hero::after { content: ''; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero .wrap { position: relative; }
+  .kicker { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); color: #EAFC66; font-size: 11.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px; }
+  .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.14; margin-bottom: 16px; max-width: 640px; }
+  .hero .lead { font-size: 16.5px; color: rgba(255,255,255,.88); max-width: 600px; line-height: 1.6; }
+  .hero .meta { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 12.5px; color: rgba(255,255,255,.75); font-weight: 600; }
+
+  /* Card del artículo */
+  .article-card { background: #fff; border-radius: 28px; box-shadow: 0 20px 60px rgba(24,29,39,.09); margin-top: -56px; padding: 44px 48px 48px; position: relative; }
+
+  /* Índice */
+  .toc { background: #F4F6FA; border: 1px solid #E8ECF2; border-radius: 18px; padding: 22px 26px; margin-bottom: 34px; }
+  .toc h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 12px; font-weight: 800; }
+  .toc ol { list-style: none; padding: 0; columns: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 7px; break-inside: avoid; }
+  .toc a { font-size: 14px; font-weight: 600; color: #3A4252; text-decoration: none; display: flex; gap: 9px; }
+  .toc a::before { content: attr(data-n); color: #2B62F6; font-weight: 800; flex-shrink: 0; }
+  .toc a:hover { color: #2B62F6; }
+
+  /* Secciones */
+  h2.sec { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 42px 0 14px; padding-left: 18px; border-left: 5px solid #EAFC66; line-height: 1.3; scroll-margin-top: 90px; }
+  p.body { font-size: 16px; color: #3A4252; margin-bottom: 16px; }
+  p.body:first-of-type { font-size: 17.5px; color: #181D27; font-weight: 500; }
+  strong { color: #181D27; }
+
+  /* CTA final — panel azul con botón lima, como la landing */
+  .cta-panel { margin-top: 48px; background: linear-gradient(120deg, #141F38, #1B3A8F 60%, #2B62F6); border-radius: 24px; padding: 40px 36px; color: #fff; text-align: center; position: relative; overflow: hidden; }
+  .cta-panel::before { content: ''; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(234,252,102,.15); }
+  .cta-panel h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; position: relative; }
+  .cta-panel p { color: rgba(255,255,255,.85); font-size: 14.5px; margin-bottom: 26px; max-width: 480px; margin-left: auto; margin-right: auto; position: relative; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: #EAFC66; color: #181D27; font-weight: 800; font-size: 15px; padding: 15px 32px; border-radius: 999px; text-decoration: none; transition: transform .15s, filter .15s; position: relative; }
+  .cta:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .cta svg { width: 16px; height: 16px; }
+
+  /* Guías relacionadas */
+  .related { margin-top: 44px; }
+  .related h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 16px; font-weight: 800; }
+  .rel-grid { display: grid; gap: 14px; }
+  .rel-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border-radius: 18px; padding: 20px 24px; text-decoration: none; color: #181D27; border: 1px solid #E8ECF2; transition: all .18s; }
+  .rel-card:hover { border-color: #2B62F6; box-shadow: 0 10px 30px rgba(43,98,246,.1); transform: translateY(-2px); }
+  .rel-card .t { font-weight: 700; font-size: 15px; line-height: 1.35; }
+  .rel-card .d { font-size: 12.5px; color: #8A93A5; font-weight: 500; margin-top: 3px; }
+  .rel-card .arrow { color: #2B62F6; font-size: 18px; flex-shrink: 0; }
+
+  /* Footer */
+  footer { margin-top: 48px; padding: 28px 0 48px; border-top: 1px solid #E8ECF2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+  footer .fbrand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: #181D27; text-decoration: none; }
+  footer .fbrand span { color: #2B62F6; }
+  footer .flinks { display: flex; gap: 20px; }
+  footer .flinks a { font-size: 13px; font-weight: 600; color: #60697A; text-decoration: none; }
+  footer .flinks a:hover { color: #2B62F6; }
+  footer .copy { font-size: 12px; color: #9AA3B2; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 44px 0 80px; }
+    .hero h1 { font-size: 27px; }
+    .article-card { padding: 28px 22px 32px; margin-top: -40px; }
+    .toc ol { columns: 1; }
+    .cta-panel { padding: 32px 22px; }
+  }
 """
+
+BRAND_SVG = '<svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
 
 
 def page_html(a):
     canonical = f"{BASE}/guias/{a['slug']}/"
-    sections_html = "".join(f"<h2>{html.escape(t)}</h2><p>{html.escape(p)}</p>" for t, p in a["sections"])
+    sections_html = ""
+    toc_items = []
+    for i, (t, p) in enumerate(a["sections"], 1):
+        sid = f"s{i}"
+        toc_items.append(f'<li><a href="#{sid}" data-n="{i}.">{html.escape(t)}</a></li>')
+        sections_html += f'<h2 class="sec" id="{sid}">{i}. {html.escape(t)}</h2><p class="body">{html.escape(p)}</p>'
+
+    related = [x for x in ARTICLES if x["slug"] != a["slug"]][:3]
+    rel_html = "".join(
+        f'<a class="rel-card" href="{BASE}/guias/{r["slug"]}/"><span><span class="t">{html.escape(r["title"])}</span><span class="d" style="display:block">{html.escape(r["desc"][:80])}…</span></span><span class="arrow">→</span></a>'
+        for r in related
+    )
+    words = len(a["intro"].split()) + sum(len(p.split()) for _, p in a["sections"]) + 120
+    read_min = max(3, round(words / 200))
+
     jsonld = json.dumps({
         "@context": "https://schema.org",
         "@graph": [
@@ -211,21 +288,50 @@ def page_html(a):
 <style>{CSS}</style>
 </head>
 <body>
-<div class="wrap">
-  <a class="brand" href="{BASE}/">
-    <svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <b>Lead<span>Shop</span></b>
-  </a>
-  <nav class="crumbs"><a href="{BASE}/">Inicio</a> · <a href="{BASE}/guias/">Guías</a> · {html.escape(a['title'])}</nav>
-  <div class="card">
+
+<nav><div class="wrap">
+  <a class="brand" href="{BASE}/">{BRAND_SVG}<b>Lead<span>Shop</span></b></a>
+  <a class="nav-cta" href="{BASE}/#precios">Ver planes {ARROW}</a>
+</div></nav>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="kicker">Guía · Ventas B2B</span>
     <h1>{html.escape(a['h1'])}</h1>
-    <p>{html.escape(a['intro'])}</p>
-    {sections_html}
-    <p>{a['outro']}</p>
-    <a class="cta" href="{BASE}/#precios">Ver precios y armar mi base</a>
-    <p class="meta">Publicado el 18 de noviembre de 2026 · LeadShop</p>
+    <p class="lead">{html.escape(a['desc'])}</p>
+    <div class="meta"><span>18 nov 2026</span><span>~{read_min} min de lectura</span><span>LeadShop</span></div>
   </div>
-  <footer><a href="{BASE}/guias/">Todas las guías</a> · <a href="{BASE}/">LeadShop</a></footer>
+</div>
+
+<div class="wrap">
+  <div class="article-card">
+    <div class="toc">
+      <h3>En esta guía</h3>
+      <ol>{''.join(toc_items)}</ol>
+    </div>
+    <p class="body">{html.escape(a['intro'])}</p>
+    {sections_html}
+    <div class="cta-panel">
+      <h3>¿Listo para conseguir esos clientes?</h3>
+      <p>Arma tu base de negocios verificados por rubro y ciudad en menos de 2 minutos. Pago único, sin suscripción.</p>
+      <a class="cta" href="{BASE}/#precios">Ver planes y precios {ARROW}</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h3>Guías relacionadas</h3>
+    <div class="rel-grid">{rel_html}</div>
+  </div>
+
+  <footer>
+    <a class="fbrand" href="{BASE}/">{BRAND_SVG}<span style="font-size:15px"><b style="color:#2B62F6">Lead</b>Shop</span></a>
+    <div class="flinks">
+      <a href="{BASE}/guias/">Todas las guías</a>
+      <a href="{BASE}/bases-de-datos/">Bases por rubro y ciudad</a>
+      <a href="{BASE}/">Inicio</a>
+    </div>
+    <span class="copy">© 2026 LeadShop</span>
+  </footer>
 </div>
 </body>
 </html>
@@ -234,7 +340,9 @@ def page_html(a):
 
 def hub_html():
     cards = "".join(
-        f'<a class="card" href="{BASE}/guias/{a["slug"]}/"><h2 style="font-size:17px;margin:0 0 6px">{html.escape(a["title"])}</h2><p style="font-size:13.5px;margin:0">{html.escape(a["desc"][:110])}…</p></a>'
+        f'<a class="rel-card" href="{BASE}/guias/{a["slug"]}/" style="flex-direction:column;align-items:flex-start;gap:6px">'
+        f'<span class="t" style="font-size:16px">{html.escape(a["title"])}</span>'
+        f'<span class="d">{html.escape(a["desc"])}</span></a>'
         for a in ARTICLES
     )
     return f"""<!doctype html>
@@ -250,25 +358,47 @@ def hub_html():
 <meta property="og:url" content="{BASE}/guias/" />
 <meta property="og:image" content="{BASE}/assets/og-hero.png" />
 <style>{CSS}
-  .grid {{ display: grid; gap: 14px; margin-top: 20px; }}
-  a.card {{ display: block; text-decoration: none; color: #181D27; }}
-  a.card:hover {{ box-shadow: 0 8px 32px rgba(24,29,39,0.1); }}
+  .hero {{ padding: 72px 0 120px; }}
+  .hero h1 {{ font-size: 44px; max-width: 700px; }}
+  .rel-grid {{ margin-top: 0; }}
 </style>
 <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Guías para conseguir clientes B2B","url":BASE+"/guias/","isPartOf":{"@type":"WebSite","name":"LeadShop","url":BASE+"/"}}, ensure_ascii=False)}</script>
 </head>
 <body>
-<div class="wrap">
-  <a class="brand" href="{BASE}/">
-    <svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <b>Lead<span>Shop</span></b>
-  </a>
-  <div class="card">
+
+<nav><div class="wrap">
+  <a class="brand" href="{BASE}/">{BRAND_SVG}<b>Lead<span>Shop</span></b></a>
+  <a class="nav-cta" href="{BASE}/#precios">Ver planes {ARROW}</a>
+</div></nav>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="kicker">Centro de recursos</span>
     <h1>Guías para conseguir clientes</h1>
-    <p>Consejos prácticos, sin humo, para prospectar clientes nuevos por WhatsApp, email y bases de datos verificadas. Cada guía termina con el paso siguiente: armar tu propia base.</p>
-    <div class="grid">{cards}</div>
-    <a class="cta" href="{BASE}/#precios">Ver planes de bases de datos</a>
+    <p class="lead">Consejos prácticos, sin humo, para prospectar clientes nuevos por WhatsApp, email y bases de datos verificadas. Cada guía termina con el paso siguiente: armar tu propia base.</p>
+    <div class="meta"><span>{len(ARTICLES)} guías</span><span>Lecturas de ~5 min</span><span>LeadShop</span></div>
   </div>
-  <footer><a href="{BASE}/">LeadShop</a> · <a href="{BASE}/bases-de-datos/">Bases por rubro y ciudad</a></footer>
+</div>
+
+<div class="wrap">
+  <div class="article-card" style="margin-top:-56px">
+    <div class="rel-grid">{cards}</div>
+    <div class="cta-panel">
+      <h3>¿Prefieres ir directo al grano?</h3>
+      <p>Elige tu rubro y ciudad y recibe una base de negocios verificados con WhatsApp activo.</p>
+      <a class="cta" href="{BASE}/#precios">Ver planes y precios {ARROW}</a>
+    </div>
+  </div>
+
+  <footer>
+    <a class="fbrand" href="{BASE}/">{BRAND_SVG}<span style="font-size:15px"><b style="color:#2B62F6">Lead</b>Shop</span></a>
+    <div class="flinks">
+      <a href="{BASE}/guias/">Todas las guías</a>
+      <a href="{BASE}/bases-de-datos/">Bases por rubro y ciudad</a>
+      <a href="{BASE}/">Inicio</a>
+    </div>
+    <span class="copy">© 2026 LeadShop</span>
+  </footer>
 </div>
 </body>
 </html>

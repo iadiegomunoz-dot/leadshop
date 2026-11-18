@@ -19,41 +19,130 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Cómo prospectar por WhatsApp B2B sin que te bloqueen (guía 2026)", "description": "WhatsApp es el canal con más respuesta para pymes, pero hacerlo mal te cuesta el número. Técnicas para escribir a desconocidos sin ser marcado como spam.", "datePublished": "2026-11-18", "dateModified": "2026-11-18", "inLanguage": "es", "author": {"@type": "Organization", "name": "LeadShop", "url": "https://www.leadshop.site/"}, "publisher": {"@type": "Organization", "name": "LeadShop", "url": "https://www.leadshop.site/", "logo": {"@type": "ImageObject", "url": "https://www.leadshop.site/assets/og-hero.png"}}, "mainEntityOfPage": "https://www.leadshop.site/guias/prospectar-por-whatsapp-sin-que-te-bloqueen/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.leadshop.site/"}, {"@type": "ListItem", "position": 2, "name": "Guías", "item": "https://www.leadshop.site/guias/"}, {"@type": "ListItem", "position": 3, "name": "Cómo prospectar por WhatsApp B2B sin que te bloqueen (guía 2026)", "item": "https://www.leadshop.site/guias/prospectar-por-whatsapp-sin-que-te-bloqueen/"}]}]}</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; text-decoration: none; color: #181D27; }
-  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  body { font-family: 'Manrope', system-ui, sans-serif; background: #F4F6FA; color: #181D27; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: #2B62F6; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav — mismo estilo que la landing */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(244,246,250,.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(24,29,39,.06); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #181D27; }
   .brand b span { color: #2B62F6; }
-  .crumbs { font-size: 12.5px; color: #60697A; margin-bottom: 18px; }
-  .crumbs a { color: #2B62F6; text-decoration: none; }
-  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 18px; }
-  h2 { font-size: 20px; font-weight: 800; margin: 32px 0 10px; letter-spacing: -0.01em; }
-  p { font-size: 16px; color: #3A4252; margin-bottom: 14px; }
-  .card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); margin-top: 20px; }
-  .card a { color: #2B62F6; font-weight: 600; }
-  .cta { display: inline-block; margin-top: 28px; background: #2B62F6; color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; }
-  .meta { font-size: 12.5px; color: #60697A; margin-top: 24px; }
-  footer { margin-top: 48px; font-size: 12.5px; color: #60697A; text-align: center; }
-  footer a { color: #2B62F6; text-decoration: none; }
-  @media (max-width: 600px) { .card { padding: 22px 18px; } h1 { font-size: 24px; } }
+  .nav-cta { display: inline-flex; align-items: center; gap: 8px; background: #181D27; color: #fff; font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: 999px; text-decoration: none; transition: background .15s; }
+  .nav-cta:hover { background: #2B62F6; }
+  .nav-cta svg { width: 14px; height: 14px; }
+
+  /* Hero del artículo — bloque azul como las secciones de la landing */
+  .hero { background: linear-gradient(135deg, #1B3A8F 0%, #2B62F6 60%, #3D74FF 100%); color: #fff; padding: 64px 0 96px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; left: -80px; bottom: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(234,252,102,.14); }
+  .hero::after { content: ''; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero .wrap { position: relative; }
+  .kicker { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); color: #EAFC66; font-size: 11.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px; }
+  .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.14; margin-bottom: 16px; max-width: 640px; }
+  .hero .lead { font-size: 16.5px; color: rgba(255,255,255,.88); max-width: 600px; line-height: 1.6; }
+  .hero .meta { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 12.5px; color: rgba(255,255,255,.75); font-weight: 600; }
+
+  /* Card del artículo */
+  .article-card { background: #fff; border-radius: 28px; box-shadow: 0 20px 60px rgba(24,29,39,.09); margin-top: -56px; padding: 44px 48px 48px; position: relative; }
+
+  /* Índice */
+  .toc { background: #F4F6FA; border: 1px solid #E8ECF2; border-radius: 18px; padding: 22px 26px; margin-bottom: 34px; }
+  .toc h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 12px; font-weight: 800; }
+  .toc ol { list-style: none; padding: 0; columns: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 7px; break-inside: avoid; }
+  .toc a { font-size: 14px; font-weight: 600; color: #3A4252; text-decoration: none; display: flex; gap: 9px; }
+  .toc a::before { content: attr(data-n); color: #2B62F6; font-weight: 800; flex-shrink: 0; }
+  .toc a:hover { color: #2B62F6; }
+
+  /* Secciones */
+  h2.sec { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 42px 0 14px; padding-left: 18px; border-left: 5px solid #EAFC66; line-height: 1.3; scroll-margin-top: 90px; }
+  p.body { font-size: 16px; color: #3A4252; margin-bottom: 16px; }
+  p.body:first-of-type { font-size: 17.5px; color: #181D27; font-weight: 500; }
+  strong { color: #181D27; }
+
+  /* CTA final — panel azul con botón lima, como la landing */
+  .cta-panel { margin-top: 48px; background: linear-gradient(120deg, #141F38, #1B3A8F 60%, #2B62F6); border-radius: 24px; padding: 40px 36px; color: #fff; text-align: center; position: relative; overflow: hidden; }
+  .cta-panel::before { content: ''; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(234,252,102,.15); }
+  .cta-panel h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; position: relative; }
+  .cta-panel p { color: rgba(255,255,255,.85); font-size: 14.5px; margin-bottom: 26px; max-width: 480px; margin-left: auto; margin-right: auto; position: relative; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: #EAFC66; color: #181D27; font-weight: 800; font-size: 15px; padding: 15px 32px; border-radius: 999px; text-decoration: none; transition: transform .15s, filter .15s; position: relative; }
+  .cta:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .cta svg { width: 16px; height: 16px; }
+
+  /* Guías relacionadas */
+  .related { margin-top: 44px; }
+  .related h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: #8A93A5; margin-bottom: 16px; font-weight: 800; }
+  .rel-grid { display: grid; gap: 14px; }
+  .rel-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border-radius: 18px; padding: 20px 24px; text-decoration: none; color: #181D27; border: 1px solid #E8ECF2; transition: all .18s; }
+  .rel-card:hover { border-color: #2B62F6; box-shadow: 0 10px 30px rgba(43,98,246,.1); transform: translateY(-2px); }
+  .rel-card .t { font-weight: 700; font-size: 15px; line-height: 1.35; }
+  .rel-card .d { font-size: 12.5px; color: #8A93A5; font-weight: 500; margin-top: 3px; }
+  .rel-card .arrow { color: #2B62F6; font-size: 18px; flex-shrink: 0; }
+
+  /* Footer */
+  footer { margin-top: 48px; padding: 28px 0 48px; border-top: 1px solid #E8ECF2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+  footer .fbrand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: #181D27; text-decoration: none; }
+  footer .fbrand span { color: #2B62F6; }
+  footer .flinks { display: flex; gap: 20px; }
+  footer .flinks a { font-size: 13px; font-weight: 600; color: #60697A; text-decoration: none; }
+  footer .flinks a:hover { color: #2B62F6; }
+  footer .copy { font-size: 12px; color: #9AA3B2; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 44px 0 80px; }
+    .hero h1 { font-size: 27px; }
+    .article-card { padding: 28px 22px 32px; margin-top: -40px; }
+    .toc ol { columns: 1; }
+    .cta-panel { padding: 32px 22px; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <a class="brand" href="https://www.leadshop.site/">
-    <svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <b>Lead<span>Shop</span></b>
-  </a>
-  <nav class="crumbs"><a href="https://www.leadshop.site/">Inicio</a> · <a href="https://www.leadshop.site/guias/">Guías</a> · Cómo prospectar por WhatsApp B2B sin que te bloqueen (guía 2026)</nav>
-  <div class="card">
+
+<nav><div class="wrap">
+  <a class="brand" href="https://www.leadshop.site/"><svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Lead<span>Shop</span></b></a>
+  <a class="nav-cta" href="https://www.leadshop.site/#precios">Ver planes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div></nav>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="kicker">Guía · Ventas B2B</span>
     <h1>Prospectar por WhatsApp sin que te bloqueen</h1>
-    <p>WhatsApp bloquea cuentas que escriben de forma masiva y repetitiva a desconocidos. No es que el canal no funcione: es que funciona solo si escribes como una persona, no como una máquina de spam. Estas reglas te mantienen fuera de problemas y aumentan tus respuestas.</p>
-    <h2>Nunca uses listas masivas automatizadas</h2><p>Las herramientas que envían el mismo mensaje a cientos de números a la vez son la forma más rápida de perder tu número. WhatsApp las detecta por patrones: mismo texto, mismo intervalo, mismo horario. Si envías 200 mensajes idénticos en una hora, estás bloqueado antes del mediodía.</p><h2>Escribe mensajes únicos y cortos</h2><p>Cada mensaje debería mencionar algo real de esa empresa: su rubro, su zona, algo que viste en su web o Instagram. &#x27;Hola, vi que tienen clínica en [zona]…&#x27; funciona; &#x27;Estimado cliente, le escribo para ofrecerle…&#x27; no. La personalización no es opcional, es lo que separa un mensaje de WhatsApp de spam.</p><h2>Respeta los horarios y el volumen</h2><p>Escribe en horario laboral del país de tu cliente y mantén un volumen humano: decenas de mensajes personalizados al día, no cientos idénticos. Si un número te bloquea o reporta, deja de escribirle: WhatsApp penaliza los reportes mucho más que los mensajes ignorados.</p><h2>Da un motivo para responder</h2><p>Termina con una pregunta concreta y fácil: &#x27;¿Les interesa que les cuente en 2 minutos cómo lo hace [empresa similar]?&#x27; Una pregunta de sí/no genera más respuestas que &#x27;quedo atento a sus comentarios&#x27;. Y si no responden, un solo seguimiento amable a los 4 días; dos como máximo.</p><h2>Ten un número dedicado a ventas</h2><p>Usa un chip/eSIM o un segundo número para prospección, nunca tu WhatsApp personal. Si algo sale mal, pierdes ese número, no tu vida social. Y configura el perfil de empresa: nombre del negocio, logo y una descripción clara de qué haces.</p>
-    <p>El primer paso siempre es la misma pregunta: ¿a quién le escribo? Si necesitas una <a href="/bases-de-datos/">base de negocios con WhatsApp ya verificado</a>, la tienes lista para empezar hoy.</p>
-    <a class="cta" href="https://www.leadshop.site/#precios">Ver precios y armar mi base</a>
-    <p class="meta">Publicado el 18 de noviembre de 2026 · LeadShop</p>
+    <p class="lead">WhatsApp es el canal con más respuesta para pymes, pero hacerlo mal te cuesta el número. Técnicas para escribir a desconocidos sin ser marcado como spam.</p>
+    <div class="meta"><span>18 nov 2026</span><span>~3 min de lectura</span><span>LeadShop</span></div>
   </div>
-  <footer><a href="https://www.leadshop.site/guias/">Todas las guías</a> · <a href="https://www.leadshop.site/">LeadShop</a></footer>
+</div>
+
+<div class="wrap">
+  <div class="article-card">
+    <div class="toc">
+      <h3>En esta guía</h3>
+      <ol><li><a href="#s1" data-n="1.">Nunca uses listas masivas automatizadas</a></li><li><a href="#s2" data-n="2.">Escribe mensajes únicos y cortos</a></li><li><a href="#s3" data-n="3.">Respeta los horarios y el volumen</a></li><li><a href="#s4" data-n="4.">Da un motivo para responder</a></li><li><a href="#s5" data-n="5.">Ten un número dedicado a ventas</a></li></ol>
+    </div>
+    <p class="body">WhatsApp bloquea cuentas que escriben de forma masiva y repetitiva a desconocidos. No es que el canal no funcione: es que funciona solo si escribes como una persona, no como una máquina de spam. Estas reglas te mantienen fuera de problemas y aumentan tus respuestas.</p>
+    <h2 class="sec" id="s1">1. Nunca uses listas masivas automatizadas</h2><p class="body">Las herramientas que envían el mismo mensaje a cientos de números a la vez son la forma más rápida de perder tu número. WhatsApp las detecta por patrones: mismo texto, mismo intervalo, mismo horario. Si envías 200 mensajes idénticos en una hora, estás bloqueado antes del mediodía.</p><h2 class="sec" id="s2">2. Escribe mensajes únicos y cortos</h2><p class="body">Cada mensaje debería mencionar algo real de esa empresa: su rubro, su zona, algo que viste en su web o Instagram. &#x27;Hola, vi que tienen clínica en [zona]…&#x27; funciona; &#x27;Estimado cliente, le escribo para ofrecerle…&#x27; no. La personalización no es opcional, es lo que separa un mensaje de WhatsApp de spam.</p><h2 class="sec" id="s3">3. Respeta los horarios y el volumen</h2><p class="body">Escribe en horario laboral del país de tu cliente y mantén un volumen humano: decenas de mensajes personalizados al día, no cientos idénticos. Si un número te bloquea o reporta, deja de escribirle: WhatsApp penaliza los reportes mucho más que los mensajes ignorados.</p><h2 class="sec" id="s4">4. Da un motivo para responder</h2><p class="body">Termina con una pregunta concreta y fácil: &#x27;¿Les interesa que les cuente en 2 minutos cómo lo hace [empresa similar]?&#x27; Una pregunta de sí/no genera más respuestas que &#x27;quedo atento a sus comentarios&#x27;. Y si no responden, un solo seguimiento amable a los 4 días; dos como máximo.</p><h2 class="sec" id="s5">5. Ten un número dedicado a ventas</h2><p class="body">Usa un chip/eSIM o un segundo número para prospección, nunca tu WhatsApp personal. Si algo sale mal, pierdes ese número, no tu vida social. Y configura el perfil de empresa: nombre del negocio, logo y una descripción clara de qué haces.</p>
+    <div class="cta-panel">
+      <h3>¿Listo para conseguir esos clientes?</h3>
+      <p>Arma tu base de negocios verificados por rubro y ciudad en menos de 2 minutos. Pago único, sin suscripción.</p>
+      <a class="cta" href="https://www.leadshop.site/#precios">Ver planes y precios <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h3>Guías relacionadas</h3>
+    <div class="rel-grid"><a class="rel-card" href="https://www.leadshop.site/guias/como-conseguir-clientes-nuevos/"><span><span class="t">Cómo conseguir clientes nuevos: guía práctica para pymes y freelancers</span><span class="d" style="display:block">Métodos reales para conseguir clientes nuevos en 2026: prospección directa, refe…</span></span><span class="arrow">→</span></a><a class="rel-card" href="https://www.leadshop.site/guias/como-elegir-base-de-datos-b2b/"><span><span class="t">Cómo elegir una base de datos B2B sin tirar la plata</span><span class="d" style="display:block">Qué verificar antes de comprar una base de datos de clientes: verificación de Wh…</span></span><span class="arrow">→</span></a><a class="rel-card" href="https://www.leadshop.site/guias/errores-prospeccion-b2b/"><span><span class="t">Por qué nadie te responde: 7 errores de prospección B2B</span><span class="d" style="display:block">Los errores más comunes al prospectar clientes nuevos por WhatsApp o email y cóm…</span></span><span class="arrow">→</span></a></div>
+  </div>
+
+  <footer>
+    <a class="fbrand" href="https://www.leadshop.site/"><svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="black"/><rect x="15" y="11" width="34" height="26" rx="10" fill="white"/><path d="M21 35 L13 51 L31 37 Z" fill="white"/><path d="M25 21.5l4.5 4.5L39 19" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:15px"><b style="color:#2B62F6">Lead</b>Shop</span></a>
+    <div class="flinks">
+      <a href="https://www.leadshop.site/guias/">Todas las guías</a>
+      <a href="https://www.leadshop.site/bases-de-datos/">Bases por rubro y ciudad</a>
+      <a href="https://www.leadshop.site/">Inicio</a>
+    </div>
+    <span class="copy">© 2026 LeadShop</span>
+  </footer>
 </div>
 </body>
 </html>
