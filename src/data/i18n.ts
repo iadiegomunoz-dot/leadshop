@@ -130,9 +130,9 @@ export const T = {
         ],
       },
       channels: {
-        badge: 'Elige 2 canales',
+        badge: 'Elige 2 o más canales',
         title: '¿Por dónde quieres contactarlos?',
-        p: 'El precio lo defines en los planes de abajo según cuántos clientes quieres (10, 50 o a medida). Dentro de cada cliente eliges 2 canales de contacto gratis —por defecto WhatsApp y sitio web, o los que prefieras— y cada canal extra suma US$0,10 por cliente.',
+        p: 'El precio lo defines en los planes de abajo según cuántos clientes quieres (25, 100 o a medida). Dentro de cada cliente eliges 2 canales de contacto gratis —por defecto WhatsApp y sitio web, o los que prefieras— y cada canal extra suma US$0,10 por cliente.',
         counter: (n: number) => `Canales seleccionados (${n})`,
         includedNote: '· incluidos en tu plan',
         included: 'Incluido en tu plan',
@@ -216,18 +216,6 @@ export const T = {
             question: '¿Puedo recibir clientes todos los meses?',
             answer:
               'Sí. En entregas recurrentes (plan a medida) configuramos frecuencia semanal o mensual con exclusión automática de negocios ya entregados para evitar duplicados entre campañas.',
-          },
-          {
-            id: 'faq-5',
-            question: '¿Por qué es tan barato?',
-            answer:
-              'Porque automatizamos la búsqueda y la verificación en lugar de cobrarte horas de prospección manual. Una hora buscando contactos a mano cuesta más que toda una base de 25 clientes. Pagas por datos listos para usar, no por tiempo de búsqueda.',
-          },
-          {
-            id: 'faq-6',
-            question: '¿Quién creó LeadShop?',
-            answer:
-              'LeadShop es un servicio enfocado en brindar bases B2B verificadas, accionables y sin suscripciones para equipos comerciales y agencias.',
           },
         ],
         contactBadge: 'Hablemos',
@@ -526,9 +514,9 @@ export const T = {
         ],
       },
       channels: {
-        badge: 'Pick 2 channels',
+        badge: 'Pick 2 or more channels',
         title: 'How do you want to reach them?',
-        p: 'You set the price in the plans below based on how many clients you want (10, 50 or custom). Each client includes 2 free contact channels —WhatsApp and website by default, or your pick— and each extra channel adds US$0.10 per client.',
+        p: 'You set the price in the plans below based on how many clients you want (25, 100 or custom). Each client includes 2 free contact channels —WhatsApp and website by default, or your pick— and each extra channel adds US$0.10 per client.',
         counter: (n: number) => `Selected channels (${n})`,
         includedNote: '· included in your plan',
         included: 'Included in your plan',
@@ -612,18 +600,6 @@ export const T = {
             question: 'Can I receive clients every month?',
             answer:
               'Yes. For recurring deliveries (custom plan) we set up weekly or monthly frequency with automatic exclusion of already-delivered businesses to avoid duplicates across campaigns.',
-          },
-          {
-            id: 'faq-5',
-            question: 'Why is it so cheap?',
-            answer:
-              'Because we automate the search and verification instead of charging you for hours of manual prospecting. One hour of hunting contacts by hand costs more than an entire base of 25 clients. You pay for ready-to-use data, not search time.',
-          },
-          {
-            id: 'faq-6',
-            question: 'Who built LeadShop?',
-            answer:
-              'LeadShop is a service focused on providing verified, actionable B2B bases with no subscriptions for sales teams and agencies.',
           },
         ],
         contactBadge: 'Contact',
