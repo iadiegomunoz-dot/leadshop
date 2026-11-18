@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { COVERAGE_CITIES, type CityTarget } from '../data/zleadsData';
+import { COVERAGE_CITIES, type CityTarget } from '../data/siteData';
 
 interface ThreeGlobeProps {
   selectedCity: CityTarget;
@@ -256,6 +256,7 @@ export function ThreeGlobe({ selectedCity, onSelectCity }: ThreeGlobeProps) {
   return (
     <div
       ref={mountRef}
+      role="img"
       className="w-full h-full cursor-grab active:cursor-grabbing touch-none"
       aria-label="Globo 3D interactivo de cobertura global"
     />

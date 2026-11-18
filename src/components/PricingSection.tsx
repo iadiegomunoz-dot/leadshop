@@ -1,22 +1,99 @@
 import { ArrowUpRight } from 'lucide-react';
-import { PRICING_PLANS, type PricingPlan } from '../data/zleadsData';
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+} from 'motion/react';
+import { useRef } from 'react';
+import { PRICING_PLANS, type PricingPlan } from '../data/siteData';
+import { T, type Lang } from '../data/i18n';
 
 interface PricingSectionProps {
   onSelectPlan: (plan: PricingPlan) => void;
+  lang?: Lang;
 }
 
-export function PricingSection({ onSelectPlan }: PricingSectionProps) {
+/** 3D tilt card with cursor-tracking glare — 21st.dev "Pricing Plan Tilt" pattern */
+function TiltCard({
+  className,
+  children,
+}: {
+  className: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useRef(
+    typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+
+  const rx = useSpring(useMotionValue(0), { stiffness: 160, damping: 18, mass: 0.6 });
+  const ry = useSpring(useMotionValue(0), { stiffness: 160, damping: 18, mass: 0.6 });
+  const gx = useMotionValue(50);
+  const gy = useMotionValue(50);
+  const glareOpacity = useSpring(useMotionValue(0), { stiffness: 200, damping: 25 });
+  const glare = useMotionTemplate`radial-gradient(480px circle at ${gx}% ${gy}%, rgba(255,255,255,0.32), rgba(255,255,255,0) 62%)`;
+
+  const handleMove = (e: React.PointerEvent) => {
+    if (reduceMotion.current || e.pointerType === 'touch') return;
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    ry.set((px - 0.5) * 9);
+    rx.set(-(py - 0.5) * 7);
+    gx.set(px * 100);
+    gy.set(py * 100);
+    glareOpacity.set(1);
+  };
+
+  const handleLeave = () => {
+    rx.set(0);
+    ry.set(0);
+    glareOpacity.set(0);
+  };
+
+  return (
+    <motion.article
+      ref={ref}
+      onPointerMove={handleMove}
+      onPointerLeave={handleLeave}
+      style={{
+        rotateX: rx,
+        rotateY: ry,
+        transformPerspective: 1100,
+        transformStyle: 'preserve-3d',
+      }}
+      className={className}
+    >
+      {/* Cursor glare */}
+      <motion.div
+        aria-hidden="true"
+        style={{ backgroundImage: glare, opacity: glareOpacity }}
+        className="pointer-events-none absolute inset-0"
+      />
+      {children}
+    </motion.article>
+  );
+}
+
+export function PricingSection({ onSelectPlan, lang = 'es' }: PricingSectionProps) {
+  const p = T[lang].sec.pricing;
+  const planText = (id: PricingPlan['id']) =>
+    (p.plans as Record<string, { name: string; price: string; subtitle: string; cta: string; features: readonly string[] }>)[id];
+
   return (
     <section id="precios" className="pt-8 md:pt-12 pb-10 space-y-8">
       <div className="text-center max-w-2xl mx-auto">
         <span className="inline-block rounded-full bg-[#3368F7] px-4 py-1 text-[12px] font-bold text-white">
-          Precio simple
+          {p.badge}
         </span>
         <h2 className="section-title mt-3 text-[26px] sm:text-[34px] font-bold leading-[1.18] tracking-[-0.02em] text-[#181D27] [text-wrap:balance]">
-          Pagas por clientes verificados
+          {p.title}
         </h2>
         <p className="mt-2.5 text-[14px] leading-[1.55] text-[#60697A]">
-          Packs de 10 a 50 clientes, o volumen a medida. Sin suscripción ni letra chica.
+          {p.p}
         </p>
       </div>
 
@@ -25,11 +102,12 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
           const isBlue = plan.variant === 'blue';
           const isIce = plan.variant === 'ice';
           const isLight = plan.variant === 'light';
+          const text = planText(plan.id);
 
           return (
-            <article
+            <TiltCard
               key={plan.id}
-              className={`pricing-card relative flex flex-col justify-between overflow-hidden rounded-[24px] p-6 sm:p-7 transition-transform duration-200 hover:-translate-y-1 ${
+              className={`pricing-card group relative flex flex-col justify-between overflow-hidden rounded-[24px] p-6 sm:p-7 ${
                 plan.id === 'custom' ? 'conic-border' : ''
               } ${
                 isLight ? 'bg-[#F4F6FA] text-[#181D27]' : ''
@@ -60,7 +138,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                     isBlue ? 'text-white' : 'text-[#181D27]'
                   }`}
                 >
-                  {plan.name}
+                  {text.name}
                 </h3>
 
                 <div className="mt-4 text-center">
@@ -69,19 +147,19 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                       isBlue ? 'text-white' : 'text-[#2B62F6]'
                     }`}
                   >
-                    {plan.price}
+                    {text.price}
                   </div>
                   <p
                     className={`mt-1.5 text-[12.5px] leading-[1.45] ${
                       isBlue ? 'text-white/80' : 'text-[#60697A]'
                     }`}
                   >
-                    {plan.subtitle}
+                    {text.subtitle}
                   </p>
                 </div>
 
                 <ul className="mt-6 space-y-3">
-                  {plan.features.map((feature) => (
+                  {text.features.map((feature) => (
                     <li
                       key={feature}
                       className={`flex items-start gap-2.5 text-[13px] leading-[1.45] ${
@@ -111,13 +189,13 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                       : 'bg-white text-[#181D27] shadow-[0_8px_22px_rgba(24,29,39,0.08)] hover:shadow-[0_12px_26px_rgba(24,29,39,0.12)] focus-visible:outline-[#2B62F6]'
                   }`}
                 >
-                  <span className="whitespace-nowrap">{plan.ctaLabel}</span>
+                  <span className="whitespace-nowrap">{text.cta}</span>
                   <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27] transition-transform duration-200 group-hover:rotate-12 group-hover:scale-105">
                     <ArrowUpRight className="h-4 w-4 stroke-[2.2]" />
                   </span>
                 </button>
               </div>
-            </article>
+            </TiltCard>
           );
         })}
       </div>
@@ -125,14 +203,14 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
       {/* Bottom Validation Banner */}
       <div className="reveal-card lime-card-surface flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[24px] p-6 sm:px-8">
         <p className="text-[15px] sm:text-[17px] font-bold text-[#181D27] [text-wrap:balance]">
-          Define el cliente ideal, los canales y el volumen. Nosotros validamos el resto.
+          {p.banner}
         </p>
         <button
           type="button"
           onClick={() => onSelectPlan(PRICING_PLANS[0])}
           className="group self-start sm:self-auto inline-flex items-center gap-3 rounded-full bg-[#181D27] py-2 pl-5 pr-2 text-[13.5px] font-bold text-white hover:bg-[#2B62F6] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
         >
-          <span>Armar mi base</span>
+          <span>{p.bannerBtn}</span>
           <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27] transition-transform duration-200 group-hover:rotate-12">
             <ArrowUpRight className="h-3.5 w-3.5 stroke-[2.2]" />
           </span>

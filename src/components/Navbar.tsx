@@ -1,14 +1,18 @@
 import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { NAV_LINKS } from '../data/zleadsData';
+import { NAV_LINKS } from '../data/siteData';
+import { T, type Lang } from '../data/i18n';
 
 interface NavbarProps {
   onNavigate: (href: string) => void;
   onOpenOrder: () => void;
+  lang: Lang;
+  onLangChange: (lang: Lang) => void;
 }
 
-export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
+export function Navbar({ onNavigate, onOpenOrder, lang, onLangChange }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const t = T[lang];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -24,6 +28,11 @@ export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [mobileOpen]);
+
+  const links = NAV_LINKS.map((item) => ({
+    ...item,
+    label: t.nav[item.href as keyof typeof t.nav] ?? item.label,
+  }));
 
   return (
     <header className="relative z-30 flex items-center justify-between gap-8 px-1 py-4 md:py-5">
@@ -51,12 +60,12 @@ export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
         <span>LeadShop</span>
       </a>
 
-      {/* Zone 2: 5 single-line navigation links */}
+      {/* Zone 2: navigation links */}
       <nav
         aria-label="Navegación principal"
         className="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-[#2A313E]"
       >
-        {NAV_LINKS.map((item) => (
+        {links.map((item) => (
           <a
             key={item.href}
             href={item.href}
@@ -68,21 +77,43 @@ export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
         ))}
       </nav>
 
-      {/* Zone 3: 1 primary action */}
+      {/* Zone 3: language switch + primary action + mobile toggle */}
       <div className="flex items-center gap-3 shrink-0">
+        <div
+          role="group"
+          aria-label="Idioma / Language"
+          className="flex items-center rounded-full border border-slate-200 bg-[#F8FAFD] p-0.5 text-[11px] font-extrabold tracking-wide"
+        >
+          {(['es', 'en'] as const).map((l) => (
+            <button
+              key={l}
+              type="button"
+              onClick={() => onLangChange(l)}
+              aria-pressed={lang === l}
+              className={`rounded-full px-2.5 py-1 uppercase transition-colors cursor-pointer ${
+                lang === l
+                  ? 'bg-[#2B62F6] text-white shadow-sm'
+                  : 'text-[#60697A] hover:text-[#181D27]'
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+
         <button
           type="button"
           onClick={onOpenOrder}
           className="hidden sm:inline-flex items-center justify-center rounded-full border border-[#2B62F6]/35 bg-white px-5 py-2 text-[13.5px] font-semibold text-[#181D27] whitespace-nowrap shrink-0 transition-all duration-150 hover:border-[#2B62F6] hover:bg-[#2B62F6] hover:text-white active:scale-[0.98] cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2B62F6]"
         >
-          Armar mi base
+          {t.order}
         </button>
 
         <button
           type="button"
           onClick={() => setMobileOpen((prev) => !prev)}
           aria-expanded={mobileOpen}
-          aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={mobileOpen ? t.closeMenu : t.menu}
           className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-[#181D27] hover:bg-slate-50 cursor-pointer"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -93,7 +124,7 @@ export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
       {mobileOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 mt-2 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xl">
           <nav className="flex flex-col gap-3">
-            {NAV_LINKS.map((item) => (
+            {links.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -111,7 +142,7 @@ export function Navbar({ onNavigate, onOpenOrder }: NavbarProps) {
               }}
               className="mt-2 w-full rounded-full bg-[#2B62F6] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2457ED] transition-colors cursor-pointer"
             >
-              Armar mi base
+              {t.order}
             </button>
           </nav>
         </div>

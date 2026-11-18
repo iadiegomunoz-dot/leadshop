@@ -4,17 +4,21 @@ import Lenis from 'lenis';
 import { ArrowUpRight } from 'lucide-react';
 import { useMotionValueEvent, useScroll } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { ChannelsAndApiSection } from './components/ChannelsAndApiSection';
+import { ChannelsSection } from './components/ChannelsSection';
 import { CoverageGlobeSection } from './components/CoverageGlobeSection';
 import { FaqAndContactSection } from './components/FaqAndContactSection';
+import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { Navbar } from './components/Navbar';
 import { PricingSection } from './components/PricingSection';
 import { ValueAndGuaranteeSection } from './components/ValueAndGuaranteeSection';
-import { OrderModal, SampleModal } from './components/ZLeadsModals';
-import { ChannelsMarquee, ScrollProgressBar } from './components/ScrollFX';
-import { NAV_LINKS, PRICING_PLANS, type PricingPlan } from './data/zleadsData';
+import { SampleModal } from './components/SampleModal';
+import { OrderWizard } from './components/OrderWizard';
+import { TermsModal } from './components/TermsModal';
+import { ScrollProgressBar } from './components/ScrollFX';
+import { PRICING_PLANS, type PricingPlan } from './data/siteData';
+import { T, type Lang } from './data/i18n';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,8 +30,15 @@ export default function App() {
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan>(PRICING_PLANS[0]);
   const [presetQuery, setPresetQuery] = useState('');
   const [sampleOpen, setSampleOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
   const [ctaHidden, setCtaHidden] = useState(false);
+  const [lang, setLang] = useState<Lang>('es');
   const { scrollY } = useScroll();
+
+  // Keep document language in sync with the ES/EN selector
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   // Hide the sticky mobile CTA while scrolling down, reveal on scroll up
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -64,6 +75,17 @@ export default function App() {
       };
     }
   }, []);
+
+  // Pause smooth scroll while a fullscreen overlay is open
+  useEffect(() => {
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    if (orderOpen || sampleOpen || termsOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }, [orderOpen, sampleOpen, termsOpen]);
 
   // Section-by-section GSAP choreography
   useEffect(() => {
@@ -175,76 +197,67 @@ export default function App() {
   };
 
   return (
-    <div
-      ref={pageRef}
-      className="min-h-screen bg-[#2B62F6] px-2.5 py-3 sm:px-6 sm:py-6 lg:px-10 lg:py-9"
-    >
-      {/* Signature Rounded White Page Canvas inside Cobalt Blue Frame */}
-      <div className="mx-auto max-w-[1160px] rounded-[28px] sm:rounded-[36px] bg-white px-4 sm:px-8 lg:px-12 pb-24 lg:pb-10 shadow-[0_30px_90px_rgba(11,34,112,0.32)]">
+    <div ref={pageRef} className="min-h-screen bg-white">
+      {/* Full-width page canvas */}
+      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-14 pb-24 lg:pb-10">
         <Navbar
           onNavigate={handleNavigate}
           onOpenOrder={() => openOrderModal(PRICING_PLANS[0])}
+          lang={lang}
+          onLangChange={setLang}
         />
 
         <main>
           <HeroSection
             onStartOrder={() => openOrderModal(PRICING_PLANS[0])}
             onOpenSample={() => setSampleOpen(true)}
+            lang={lang}
           />
 
-          <ChannelsMarquee />
 
           <ValueAndGuaranteeSection
             onOpenSample={() => setSampleOpen(true)}
-            onStartOrder={() => openOrderModal(PRICING_PLANS[0])}
+            lang={lang}
           />
 
           <CoverageGlobeSection
             onStartOrder={(query) => openOrderModal(PRICING_PLANS[0], query)}
+            lang={lang}
           />
 
           <HowItWorksSection
             onStartOrder={(query) => openOrderModal(PRICING_PLANS[0], query)}
+            lang={lang}
           />
 
-          <ChannelsAndApiSection
+          <ChannelsSection
             onStartOrder={(query) => openOrderModal(PRICING_PLANS[1], query)}
+            lang={lang}
           />
 
-          <PricingSection onSelectPlan={(plan) => openOrderModal(plan)} />
+          <PricingSection
+            onSelectPlan={(plan) => openOrderModal(plan)}
+            lang={lang}
+          />
 
           <FaqAndContactSection
             onNavigateToPricing={() => handleNavigate('#precios')}
+            onStartOrder={() => openOrderModal(PRICING_PLANS[0])}
+            lang={lang}
           />
         </main>
 
-        {/* Quiet Footer */}
-        <footer className="mt-6 border-t border-slate-200/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12.5px] text-[#60697A]">
-          <div className="font-semibold text-[#181D27]">
-            LeadShop · Z Aplicaciones · infozaplicaciones@gmail.com
-          </div>
-          <nav className="flex flex-wrap items-center justify-center gap-5">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavigate(link.href);
-                }}
-                className="hover:text-[#2B62F6] transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </footer>
+        <Footer
+          onNavigate={handleNavigate}
+          lang={lang}
+          onOpenTerms={() => setTermsOpen(true)}
+        />
       </div>
 
       <ScrollProgressBar />
 
       {/* Sticky mobile CTA (hidden on lg+, while a modal is open, or scrolling down) */}
-      {!orderOpen && !sampleOpen && (
+      {!orderOpen && !sampleOpen && !termsOpen && (
         <div
           className={`pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out lg:hidden ${
             ctaHidden ? 'translate-y-[130%]' : 'translate-y-0'
@@ -255,7 +268,7 @@ export default function App() {
             onClick={() => openOrderModal(PRICING_PLANS[0])}
             className="pointer-events-auto group flex w-full items-center justify-between gap-3 rounded-full bg-[#181D27] py-2 pl-6 pr-2 text-[14px] font-bold text-white shadow-[0_14px_34px_rgba(24,29,39,0.35)] transition-transform duration-150 active:scale-[0.98] cursor-pointer"
           >
-            <span>Armar mi base · desde US$5,99</span>
+            <span>{T[lang].sticky}</span>
             <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27] transition-transform duration-200 group-hover:rotate-12">
               <ArrowUpRight className="h-4 w-4 stroke-[2.2]" />
             </span>
@@ -263,19 +276,34 @@ export default function App() {
         </div>
       )}
 
-      <OrderModal
+      <OrderWizard
         isOpen={orderOpen}
-        initialPlan={selectedPlan}
-        initialQuery={presetQuery}
+        initialQty={
+          selectedPlan.id === 'growth' ? 100 : selectedPlan.id === 'custom' ? 250 : 25
+        }
+        presetQuery={presetQuery}
         onClose={() => setOrderOpen(false)}
+        lang={lang}
       />
 
       <SampleModal
         isOpen={sampleOpen}
         onClose={() => setSampleOpen(false)}
-        onOrderCustom={() =>
-          openOrderModal(PRICING_PLANS[0], 'Muestra gratis de 5 clientes para mi rubro y zona')
-        }
+        lang={lang}
+        onOrderCustom={() => {
+          window.open(
+            'https://wa.me/56982355145?text=' +
+              encodeURIComponent(T[lang].sampleWaMsg),
+            '_blank',
+            'noopener,noreferrer'
+          );
+        }}
+      />
+
+      <TermsModal
+        isOpen={termsOpen}
+        lang={lang}
+        onClose={() => setTermsOpen(false)}
       />
 
     </div>

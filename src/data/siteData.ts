@@ -25,13 +25,8 @@ export interface WorkflowStep {
 export interface OutboundChannel {
   id: string;
   name: string;
+  icon: string;
   defaultIncluded?: boolean;
-}
-
-export interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
 }
 
 export interface PricingPlan {
@@ -64,26 +59,26 @@ export const NAV_LINKS = [
 export const GUARANTEES: GuaranteeCard[] = [
   {
     id: 'replace',
-    title: 'Reemplazo de inválidos',
-    description: 'Si un contacto no funciona, lo reemplazamos sin costo.',
+    title: 'Garantía de reemplazo',
+    description: 'Si un contacto no funciona, lo cambiamos gratis. Sin reclamos eternos ni letras chicas.',
     variant: 'white',
   },
   {
     id: 'sample',
-    title: 'Muestra gratis de 5 clientes',
-    description: 'Prueba la calidad con tu rubro y tu zona antes de pagar.',
+    title: 'Muestra gratis: 5 clientes',
+    description: 'Prueba la calidad con tu rubro y tu zona antes de pagar. Riesgo cero.',
     variant: 'ice',
   },
   {
     id: 'no-sub',
-    title: 'Sin suscripción ni mínimo',
-    description: 'Pide desde 10 clientes y paga una sola vez.',
+    title: 'Pago único, sin suscripción',
+    description: 'Pides, recibes y listo. Cero cobros mensuales y cero mínimos.',
     variant: 'lime',
   },
   {
     id: 'delivery',
-    title: 'Entrega hasta 24 horas hábiles',
-    description: 'Te avisamos por email apenas esté lista y la descargas desde tu pedido.',
+    title: 'Entrega en 24h hábiles',
+    description: 'Tu base lista al siguiente día hábil. Te avisamos por email apenas esté.',
     variant: 'blue',
   },
 ];
@@ -141,99 +136,62 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
 ];
 
 export const OUTBOUND_CHANNELS: OutboundChannel[] = [
-  { id: 'whatsapp', name: 'WhatsApp', defaultIncluded: true },
-  { id: 'website', name: 'Sitio web', defaultIncluded: true },
-  { id: 'instagram', name: 'Instagram' },
-  { id: 'tiktok', name: 'TikTok' },
-  { id: 'facebook', name: 'Facebook' },
-  { id: 'youtube', name: 'YouTube' },
-  { id: 'linkedin', name: 'LinkedIn' },
-  { id: 'email', name: 'Email' },
-  { id: 'phone', name: 'Teléfono' },
-  { id: 'address', name: 'Dirección' },
+  { id: 'whatsapp', name: 'WhatsApp', icon: 'whatsapp', defaultIncluded: true },
+  { id: 'website', name: 'Sitio web', icon: 'website', defaultIncluded: true },
+  { id: 'instagram', name: 'Instagram', icon: 'instagram' },
+  { id: 'tiktok', name: 'TikTok', icon: 'tiktok' },
+  { id: 'facebook', name: 'Facebook', icon: 'facebook' },
+  { id: 'youtube', name: 'YouTube', icon: 'youtube' },
+  { id: 'linkedin', name: 'LinkedIn', icon: 'linkedin' },
+  { id: 'email', name: 'Email', icon: 'email' },
+  { id: 'phone', name: 'Teléfono', icon: 'phone' },
+  { id: 'address', name: 'Dirección', icon: 'address' },
 ];
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
     id: 'starter',
     name: 'Esencial',
-    price: 'US$5,99',
-    subtitle: '10 clientes · WhatsApp y sitio web',
+    price: 'US$20,99',
+    subtitle: '25 clientes · WhatsApp y sitio web',
     variant: 'light',
     ctaLabel: 'Armar mi base',
     features: [
-      '10 clientes verificados',
+      '25 clientes verificados',
+      '≈ US$0,84 por cliente',
       'WhatsApp y sitio web incluidos',
-      'Reemplazo de inválidos',
+      'Reemplazo gratis si no sirve',
       'Entrega en CSV / XLSX',
     ],
   },
   {
     id: 'growth',
     name: 'Crecimiento',
-    price: 'US$10,99',
-    subtitle: '50 clientes · WhatsApp y sitio web',
+    price: 'US$69,99',
+    subtitle: '100 clientes · WhatsApp y sitio web',
     variant: 'ice',
     ctaLabel: 'Armar mi base',
     features: [
-      '50 clientes verificados',
+      '100 clientes verificados',
+      '≈ US$0,70 por cliente',
       'WhatsApp y sitio web incluidos',
-      'Reemplazo de inválidos',
+      'Reemplazo gratis si no sirve',
       'Entrega prioritaria',
     ],
   },
   {
     id: 'custom',
     name: 'A medida',
-    price: '~US$100',
+    price: 'Cotiza tu base',
     subtitle: 'Volumen y canales según tu operación',
     variant: 'blue',
-    ctaLabel: 'Cotizar mi volumen',
+    ctaLabel: 'Armar mi base de datos',
     features: [
       'Volumen a medida',
       'Canales extra: Instagram, LinkedIn, Email…',
       'Entregas recurrentes',
       'Sin duplicados entre entregas',
     ],
-  },
-];
-
-export const FAQ_ITEMS: FaqItem[] = [
-  {
-    id: 'faq-1',
-    question: '¿Qué trae cada cliente?',
-    answer:
-      'Cada cliente incluye nombre del negocio, categoría, ciudad y los 2 canales incluidos por defecto (WhatsApp verificado y sitio web, o los 2 que elijas), además de cualquier campo extra que agregues como Instagram, LinkedIn, email, teléfono o dirección.',
-  },
-  {
-    id: 'faq-2',
-    question: '¿Qué pasa si no hay suficientes contactos?',
-    answer:
-      'Validamos el universo disponible antes de cobrarte. Si en tu zona o rubro hay menos negocios que cumplen los canales obligatorios, ajustamos el alcance o ampliamos el radio junto contigo antes de procesar el pedido.',
-  },
-  {
-    id: 'faq-3',
-    question: '¿Cómo funciona el pedido con texto?',
-    answer:
-      'Escribes tu pedido en lenguaje natural, por ejemplo: "Vendo software para clínicas en Buenos Aires con WhatsApp y web". Nuestro sistema lo traduce automáticamente en filtros de rubro, geografía, canales y volumen.',
-  },
-  {
-    id: 'faq-4',
-    question: '¿Puedo recibir clientes todos los meses?',
-    answer:
-      'Sí. En entregas recurrentes (Enterprise) configuramos frecuencia semanal o mensual con exclusión automática de negocios ya entregados para evitar duplicados entre campañas.',
-  },
-  {
-    id: 'faq-5',
-    question: '¿Quién creó LeadShop?',
-    answer:
-      'LeadShop es un producto desarrollado por Z Aplicaciones enfocado en brindar bases B2B verificadas, accionables y sin suscripciones forzadas para equipos comerciales y agencias.',
-  },
-  {
-    id: 'faq-6',
-    question: '¿Puedo usar LeadShop desde Claude o ChatGPT?',
-    answer:
-      'Sí. Puedes conectar tu cuenta vía MCP o API REST para consultar disponibilidad de cobertura, armar pedidos por texto y descargar tus bases directamente desde tu flujo con asistentes o CRM.',
   },
 ];
 
@@ -277,38 +235,5 @@ export const SAMPLE_PREVIEW_ROWS: SampleLeadRow[] = [
     whatsapp: '+54 9 11 5987-1024 (Verificado)',
     website: 'medicosnunez.com.ar',
     rating: '4.8 ★',
-  },
-];
-
-export const CONTACT_CHANNELS = [
-  {
-    label: 'WhatsApp · Respuesta directa del equipo',
-    value: '+54 9 11 5809-2000',
-    href: 'https://wa.me/5491158092000',
-    icon: 'whatsapp',
-  },
-  {
-    label: 'Llamada · Hablemos directo',
-    value: '+1 650 797 0332',
-    href: 'tel:+16507970332',
-    icon: 'phone',
-  },
-  {
-    label: 'Instagram · Síguenos',
-    value: '@leadshop',
-    href: 'https://instagram.com/leadshop',
-    icon: 'instagram',
-  },
-  {
-    label: 'LinkedIn · Síguenos',
-    value: 'Z Aplicaciones',
-    href: '#hablemos',
-    icon: 'linkedin',
-  },
-  {
-    label: 'Email · Te respondemos en el día',
-    value: 'infozaplicaciones@gmail.com',
-    href: 'mailto:infozaplicaciones@gmail.com',
-    icon: 'email',
   },
 ];

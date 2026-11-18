@@ -1,53 +1,26 @@
-import { ArrowUpRight, CheckCircle2, Instagram, Linkedin, Mail, MessageCircle, Minus, Phone, Plus } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
-import { CONTACT_CHANNELS, FAQ_ITEMS } from '../data/zleadsData';
+import { ArrowUpRight, Minus, Plus } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { useRef, useState } from 'react';
+import { T, type Lang } from '../data/i18n';
 
 interface FaqAndContactSectionProps {
   onNavigateToPricing: () => void;
+  onStartOrder: () => void;
+  lang?: Lang;
 }
 
-const CHANNEL_ICONS = {
-  whatsapp: MessageCircle,
-  phone: Phone,
-  instagram: Instagram,
-  linkedin: Linkedin,
-  email: Mail,
-} as const;
-
-export function FaqAndContactSection({ onNavigateToPricing }: FaqAndContactSectionProps) {
+export function FaqAndContactSection({ onNavigateToPricing, onStartOrder, lang = 'es' }: FaqAndContactSectionProps) {
+  const fc = T[lang].sec.faqContact;
+  const FAQ_ITEMS = fc.faqItems;
   const [openFaqId, setOpenFaqId] = useState<string | null>(FAQ_ITEMS[0].id);
-
-  // Contact form state
-  const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
-  const [targetDesc, setTargetDesc] = useState('');
-  const [error, setError] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim().length < 2) {
-      setError('Ingresá tu nombre (mínimo 2 caracteres).');
-      return;
-    }
-    const c = contact.trim();
-    const isValid =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c) ||
-      /^\+?[0-9\s\-()]{8,}$/.test(c) ||
-      /^@[a-zA-Z0-9_]{3,}$/.test(c);
-    if (!isValid) {
-      setError('Ingresá un email o WhatsApp válido.');
-      return;
-    }
-    if (targetDesc.trim().length < 5) {
-      setError('Cuéntanos brevemente a quién quieres venderle.');
-      return;
-    }
-
-    setError('');
-    setSubmitted(true);
-  };
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef,
+    offset: ['start end', 'end start'],
+  });
+  const blobA = useTransform(ctaProgress, [0, 1], reduceMotion ? [0, 0] : [0, -56]);
+  const blobB = useTransform(ctaProgress, [0, 1], reduceMotion ? [0, 0] : [0, 48]);
 
   return (
     <div className="space-y-12 pt-4 pb-6">
@@ -55,9 +28,9 @@ export function FaqAndContactSection({ onNavigateToPricing }: FaqAndContactSecti
       <section id="preguntas" className="rounded-[28px] bg-[#EFF4FA] p-6 sm:p-8 lg:p-10">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="section-title text-[25px] sm:text-[32px] font-bold tracking-[-0.02em] text-[#181D27]">
-            Antes de{' '}
+            {fc.faqTitleA}{' '}
             <span className="inline-block rounded-full bg-[#EAFC66] px-4 py-0.5 text-[#181D27]">
-              armar tu base
+              {fc.faqTitleB}
             </span>
           </h2>
         </div>
@@ -117,7 +90,7 @@ export function FaqAndContactSection({ onNavigateToPricing }: FaqAndContactSecti
             onClick={() => setOpenFaqId(FAQ_ITEMS[0].id)}
             className="hover:text-[#2B62F6] transition-colors cursor-pointer"
           >
-            Ver todas las preguntas frecuentes
+            {fc.faqLinks[0]}
           </button>
           <span aria-hidden="true">·</span>
           <button
@@ -125,11 +98,11 @@ export function FaqAndContactSection({ onNavigateToPricing }: FaqAndContactSecti
             onClick={onNavigateToPricing}
             className="hover:text-[#2B62F6] transition-colors cursor-pointer"
           >
-            Precios por volumen
+            {fc.faqLinks[1]}
           </button>
           <span aria-hidden="true">·</span>
           <a href="#como-funciona" className="hover:text-[#2B62F6] transition-colors">
-            Guía de bases B2B
+            {fc.faqLinks[2]}
           </a>
         </div>
       </section>
@@ -138,149 +111,57 @@ export function FaqAndContactSection({ onNavigateToPricing }: FaqAndContactSecti
       <section id="hablemos">
         <div className="text-center max-w-2xl mx-auto">
           <span className="inline-block rounded-full bg-[#3368F7] px-4 py-1 text-[12px] font-bold text-white">
-            Hablemos
+            {fc.contactBadge}
           </span>
           <h2 className="section-title mt-3 text-[26px] sm:text-[34px] font-bold leading-[1.18] tracking-[-0.02em] text-[#181D27]">
-            Cuéntanos qué necesitas y lo armamos
+            {fc.contactTitle}
           </h2>
           <p className="mt-2 text-[14px] text-[#60697A]">
-            Escríbenos por el canal que prefieras o deja tu consulta aquí abajo. Atendemos
-            en <span className="font-semibold text-[#181D27]">español e inglés</span>,
-            con foco en <span className="font-semibold text-[#181D27]">Latinoamérica</span>.
+            {fc.contactP}
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Left Direct Channels Card (Blue Gradient) */}
-          <div className="lg:col-span-5 blue-card-gradient relative flex flex-col justify-between overflow-hidden rounded-[24px] p-6 sm:p-8 text-white">
-            <div className="space-y-4 relative z-10">
-              {CONTACT_CHANNELS.map((ch) => {
-                const ChannelIcon = CHANNEL_ICONS[ch.icon as keyof typeof CHANNEL_ICONS];
-                return (
-                <a
-                  key={ch.value}
-                  href={ch.href}
-                  target={ch.href.startsWith('http') ? '_blank' : undefined}
-                  rel={ch.href.startsWith('http') ? 'noreferrer' : undefined}
-                  className="flex items-center gap-3.5 rounded-[16px] bg-white/10 px-4 py-3 transition-colors hover:bg-white/18"
-                >
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white">
-                    {ChannelIcon && <ChannelIcon className="h-4.5 w-4.5" />}
-                  </span>
-                  <span>
-                    <span className="block text-[11.5px] font-medium text-white/75">{ch.label}</span>
-                    <span className="mt-0.5 block text-[14.5px] font-bold text-[#EAFC66] tabular-nums">
-                      {ch.value}
-                    </span>
-                  </span>
-                </a>
-                );
-              })}
+        <div className="mt-8 max-w-4xl mx-auto">
+          {/* Big CTA box → order wizard */}
+          <div ref={ctaRef} className="relative overflow-hidden rounded-[28px] bg-[#2B62F6] p-6 sm:p-12 flex flex-col items-center text-center shadow-[0_18px_44px_rgba(43,98,246,0.28)]">
+            <motion.div
+              style={{ y: blobA }}
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/[0.06] blur-2xl"
+            />
+            <motion.div
+              style={{ y: blobB }}
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-[#EAFC66]/10 blur-2xl"
+            />
+            <div className="relative">
+              <span className="inline-block rounded-full bg-[#EAFC66] px-3.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#181D27]">
+                {fc.ctaBadge}
+              </span>
+              <h3 className="mt-4 text-[24px] sm:text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white">
+                {fc.ctaTitle}
+              </h3>
+              <p className="mt-3 max-w-lg text-[14px] leading-[1.6] text-white">
+                {fc.ctaP}
+              </p>
+              <button
+                type="button"
+                onClick={onStartOrder}
+                className="group mt-7 inline-flex w-full sm:w-auto items-center justify-between gap-5 rounded-full bg-white py-3.5 pl-8 pr-2 text-[15px] font-extrabold text-[#181D27] shadow-lg transition-transform duration-150 hover:scale-[1.02] active:scale-[0.99] cursor-pointer"
+              >
+                <span>{fc.ctaBtn}</span>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27] transition-transform duration-200 group-hover:rotate-12">
+                  <ArrowUpRight className="h-4.5 w-4.5 stroke-[2.4]" />
+                </span>
+              </button>
+              <p className="mt-4 text-[12px] font-medium text-white/90">
+                {fc.ctaNote}
+              </p>
             </div>
-          </div>
-
-          {/* Right Form Card (Light Ice/White) */}
-          <div className="lg:col-span-7 rounded-[24px] bg-[#F4F6FA] p-6 sm:p-8 flex flex-col justify-center">
-            {submitted ? (
-              <div className="py-8 text-center">
-                <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27]">
-                  <CheckCircle2 className="h-7 w-7" />
-                </div>
-                <h3 className="mt-4 text-[22px] font-bold text-[#181D27]">
-                  ¡Consulta enviada!
-                </h3>
-                <p className="mt-2 max-w-md mx-auto text-[14px] leading-[1.55] text-[#60697A]">
-                  Gracias, <span className="font-semibold text-[#181D27]">{name}</span>.
-                  Te respondemos en el día a{' '}
-                  <span className="font-semibold text-[#2B62F6]">{contact}</span> con una
-                  propuesta para tu base.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setName('');
-                    setContact('');
-                    setTargetDesc('');
-                  }}
-                  className="mt-6 rounded-full bg-[#2B62F6] px-6 py-2.5 text-[13.5px] font-bold text-white hover:bg-[#2457ED] transition-colors cursor-pointer"
-                >
-                  Enviar otra consulta
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-[12.5px] font-semibold text-[#181D27]"
-                  >
-                    Tu nombre
-                  </label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Tu nombre"
-                    className="mt-1.5 w-full rounded-xl border border-slate-200/90 bg-white px-4 py-3 text-base sm:text-[14px] text-[#181D27] outline-none focus:border-[#2B62F6]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="contact-email-wa"
-                    className="block text-[12.5px] font-semibold text-[#181D27]"
-                  >
-                    Email o WhatsApp
-                  </label>
-                  <input
-                    id="contact-email-wa"
-                    type="text"
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    placeholder="Email o WhatsApp"
-                    className="mt-1.5 w-full rounded-xl border border-slate-200/90 bg-white px-4 py-3 text-base sm:text-[14px] text-[#181D27] outline-none focus:border-[#2B62F6]"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="contact-target"
-                    className="block text-[12.5px] font-semibold text-[#181D27]"
-                  >
-                    ¿A quién quieres venderle?
-                  </label>
-                  <textarea
-                    id="contact-target"
-                    rows={3}
-                    value={targetDesc}
-                    onChange={(e) => setTargetDesc(e.target.value)}
-                    placeholder="¿A quién quieres venderle? Ej. clínicas en Buenos Aires con WhatsApp y sitio web"
-                    className="mt-1.5 w-full resize-none rounded-xl border border-slate-200/90 bg-white px-4 py-3 text-base sm:text-[14px] text-[#181D27] outline-none focus:border-[#2B62F6]"
-                  />
-                </div>
-
-                {error && (
-                  <p className="text-[12.5px] font-medium text-red-600" role="alert">
-                    {error}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  className="group mt-1 inline-flex w-full sm:w-auto items-center justify-between gap-4 rounded-full bg-[#2B62F6] py-2 pl-6 pr-2 text-[14px] font-bold text-white hover:bg-[#2457ED] transition-colors cursor-pointer"
-                >
-                  <span>Enviar consulta</span>
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#EAFC66] text-[#181D27] transition-transform duration-200 group-hover:rotate-12">
-                    <ArrowUpRight className="h-4 w-4 stroke-[2.2]" />
-                  </span>
-                </button>
-              </form>
-            )}
           </div>
         </div>
       </section>
+
     </div>
   );
 }

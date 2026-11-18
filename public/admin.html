@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>LeadShop · Leads</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    background: #F4F6FA; color: #181D27; min-height: 100vh;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  h1 span { color: #2B62F6; }
+  .actions { display: flex; gap: 8px; }
+  button, .btn {
+    font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    border: none; border-radius: 999px; padding: 9px 18px;
+    background: #2B62F6; color: #fff; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  button.ghost { background: #E8EFFD; color: #2B62F6; }
+  .card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(24,29,39,0.06); overflow: hidden; }
+  .login { max-width: 380px; margin: 80px auto; background: #fff; border-radius: 24px; padding: 36px 28px; box-shadow: 0 8px 40px rgba(24,29,39,0.08); text-align: center; }
+  .login h2 { font-size: 20px; margin-bottom: 6px; }
+  .login p { font-size: 13px; color: #60697A; margin-bottom: 20px; }
+  .login input {
+    width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid #E2E8F0;
+    font: inherit; font-size: 14px; margin-bottom: 12px; outline: none;
+  }
+  .login input:focus { border-color: #2B62F6; }
+  .err { color: #DC2626; font-size: 12.5px; font-weight: 600; margin-top: 8px; min-height: 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #60697A; padding: 14px 16px; border-bottom: 1px solid #EEF1F6; background: #F8FAFD; white-space: nowrap; }
+  td { padding: 13px 16px; border-bottom: 1px solid #F1F4F9; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFBFE; }
+  .mono { font-variant-numeric: tabular-nums; color: #60697A; font-size: 12px; white-space: nowrap; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .badge.order { background: #E8EFFD; color: #2B62F6; }
+  .badge.contact { background: #EAFC66; color: #181D27; }
+  .empty { padding: 48px 20px; text-align: center; color: #60697A; font-size: 14px; }
+  .count { font-size: 13px; font-weight: 700; color: #60697A; }
+  @media (max-width: 720px) {
+    table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
+    td { border: none; padding: 6px 16px; }
+    td::before { content: attr(data-label); display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: #60697A; font-weight: 700; margin-bottom: 2px; }
+    tr { border-bottom: 1px solid #F1F4F9; padding: 10px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="login" id="loginBox" style="display:none">
+    <h2>LeadShop <span style="color:#2B62F6">Admin</span></h2>
+    <p>Ingresa la clave de administrador para ver los leads.</p>
+    <input type="password" id="keyInput" placeholder="Clave admin" autocomplete="off" />
+    <button onclick="login()">Entrar</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <header>
+      <div>
+        <h1>Leads <span>recibidos</span></h1>
+        <p class="count" id="countLabel" style="margin-top:4px"></p>
+      </div>
+      <div class="actions">
+        <button class="ghost" onclick="load()">↻ Actualizar</button>
+        <button onclick="exportCsv()">↓ CSV</button>
+        <button class="ghost" onclick="logout()">Salir</button>
+      </div>
+    </header>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th><th>Nombre</th><th>Empresa</th><th>Contacto</th>
+            <th>País</th><th>Quiere venderle a</th><th>Plan</th><th>Origen</th><th>Idioma</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="empty" style="display:none">Aún no hay leads. Aparecerán aquí cuando alguien use los formularios.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let KEY = localStorage.getItem('leadshop_admin_key') || '';
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate = (iso) => iso ? new Date(iso).toLocaleString('es-CL', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+
+function login() {
+  KEY = $('keyInput').value.trim();
+  load();
+}
+function logout() {
+  localStorage.removeItem('leadshop_admin_key');
+  KEY = '';
+  $('app').style.display = 'none';
+  $('loginBox').style.display = 'block';
+  $('keyInput').value = '';
+  $('loginErr').textContent = '';
+}
+$('keyInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
+
+async function load() {
+  if (!KEY) { $('loginBox').style.display = 'block'; return; }
+  try {
+    const res = await fetch('/api/leads', { headers: { 'x-admin-key': KEY } });
+    if (res.status === 401) {
+      localStorage.removeItem('leadshop_admin_key'); KEY = '';
+      $('loginBox').style.display = 'block';
+      $('loginErr').textContent = 'Clave incorrecta';
+      return;
+    }
+    const data = await res.json();
+    if (!data.ok) throw new Error('bad');
+    localStorage.setItem('leadshop_admin_key', KEY);
+    render(data.leads || []);
+  } catch {
+    $('loginErr').textContent = 'No se pudo cargar. Intenta de nuevo.';
+    $('loginBox').style.display = 'block';
+  }
+}
+
+function render(leads) {
+  $('loginBox').style.display = 'none';
+  $('app').style.display = 'block';
+  $('countLabel').textContent = leads.length + (leads.length === 1 ? ' lead' : ' leads');
+  $('empty').style.display = leads.length ? 'none' : 'block';
+  $('tbody').innerHTML = leads.map(l => `
+    <tr>
+      <td class="mono" data-label="Fecha">${fmtDate(l.createdAt)}</td>
+      <td data-label="Nombre">${esc(l.name) || '—'}</td>
+      <td data-label="Empresa">${esc(l.company) || '—'}</td>
+      <td data-label="Contacto"><strong>${esc(l.contact)}</strong></td>
+      <td data-label="País">${esc(l.country) || '—'}</td>
+      <td data-label="Quiere venderle a">${esc(l.targetDesc)}</td>
+      <td data-label="Plan"><span class="badge ${l.source === 'order' ? 'order' : 'contact'}">${esc(l.plan || l.source)}</span></td>
+      <td data-label="Origen">${l.source === 'order' ? 'Pedido' : 'Contacto'}</td>
+      <td class="mono" data-label="Idioma">${esc(l.lang || 'es').toUpperCase()}</td>
+    </tr>`).join('');
+}
+
+function exportCsv() {
+  fetch('/api/leads', { headers: { 'x-admin-key': KEY } }).then(r => r.json()).then(data => {
+    const rows = (data.leads || []).map(l => [
+      l.createdAt, l.name, l.company, l.contact, l.country, l.targetDesc, l.plan, l.source, l.lang
+    ]);
+    const csv = 'Fecha,Nombre,Empresa,Contacto,Pais,Quiere venderle a,Plan,Origen,Idioma\n' +
+      rows.map(r => r.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'leadshop-leads.csv';
+    a.click();
+  });
+}
+
+if (KEY) load(); else { $('loginBox').style.display = 'block'; }
+</script>
+</body>
+</html>
